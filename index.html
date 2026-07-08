@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>汕尾市2026水上技能竞赛 · 刷题</title>
+    <style>
+        /* 全局重置与基础 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f4f7fc;
+            padding: 16px 12px 32px;
+            color: #0b1a2f;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .header-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003366;
+            border-left: 5px solid #1e7bb0;
+            padding-left: 14px;
+            line-height: 1.2;
+            flex: 1;
+            min-width: 180px;
+        }
+        .timer-badge {
+            background: #1a3a5c;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 40px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,20,40,0.15);
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+        .timer-badge.warning {
+            background: #b33c3c;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .sub {
+            color: #2c4c6b;
+            margin-bottom: 18px;
+            font-size: 0.92rem;
+            padding-left: 20px;
+            opacity: 0.8;
+        }
+
+        /* 统计栏 - 移动端适配 */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0,20,40,0.05);
+            margin-bottom: 22px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+        }
+        .stats span {
+            background: #eef3f9;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #004080;
+            white-space: nowrap;
+        }
+        .stats .num {
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: white;
+            border: 1px solid #cbdae8;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #1f3b57;
+            cursor: pointer;
+            transition: 0.15s;
+            touch-action: manipulation;
+        }
+        .filter-btn.active {
+            background: #1a5a8c;
+            border-color: #1a5a8c;
+            color: white;
+        }
+        .filter-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 题目卡片 */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 18px 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.04);
+            border: 1px solid #e6edf6;
+            transition: border 0.15s;
+        }
+        .question-card.correct-highlight {
+            border-left: 6px solid #2a7f4b;
+            background: #f6fbf9;
+        }
+        .question-card.wrong-highlight {
+            border-left: 6px solid #b33c3c;
+            background: #fdf6f6;
+        }
+
+        .q-header {
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .q-type {
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: #d9e3ef;
+            color: #1f4468;
+            padding: 2px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.2px;
+        }
+        .q-type.single { background: #d4e0f0; }
+        .q-type.multi { background: #d3e8e0; }
+
+        .q-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 14px;
+            word-break: break-word;
+        }
+
+        /* 选项列表 */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0 12px;
+        }
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: #f8faff;
+            border: 1px solid #e1eaf3;
+            transition: 0.1s;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .option-item:active {
+            transform: scale(0.98);
+        }
+        .option-item.selected {
+            background: #e2edfd;
+            border-color: #6d9fd1;
+        }
+        .option-item.correct-answer {
+            background: #d4f0e2;
+            border-color: #2a7f4b;
+        }
+        .option-item.wrong-answer {
+            background: #fcdede;
+            border-color: #b33c3c;
+        }
+        .option-item.disabled {
+            opacity: 0.75;
+            cursor: default;
+            pointer-events: none;
+        }
+        .option-marker {
+            font-weight: 600;
+            color: #1f4970;
+            min-width: 24px;
+            flex-shrink: 0;
+        }
+        .option-text {
+            flex: 1;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* 按钮 */
+        .btn {
+            background: white;
+            border: 1px solid #b7ccdf;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #003366;
+            cursor: pointer;
+            transition: 0.12s;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            min-height: 44px;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-primary {
+            background: #1a5a8c;
+            border-color: #1a5a8c;
+            color: white;
+        }
+        .btn-primary:active { background: #0f4a75; }
+        .btn-outline {
+            background: transparent;
+            border-color: #b0c8df;
+        }
+        .btn-outline:active { background: #eaf1fa; }
+        .btn-success {
+            background: #1f7b4a;
+            border-color: #1f7b4a;
+            color: white;
+        }
+        .btn-success:active { background: #14633b; }
+        .btn-danger {
+            background: #b33c3c;
+            border-color: #b33c3c;
+            color: white;
+        }
+        .btn-danger:active { background: #962e2e; }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            gap: 10px;
+        }
+        .action-row .status {
+            font-size: 0.8rem;
+            color: #3f6185;
+        }
+
+        /* 多选提交区域 */
+        .multi-submit-area {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .multi-submit-area .btn {
+            padding: 6px 18px;
+            font-size: 0.82rem;
+            min-height: 40px;
+        }
+        .multi-submit-area .hint {
+            font-size: 0.8rem;
+            color: #5f7a99;
+        }
+
+        /* 反馈信息 */
+        .feedback {
+            margin-top: 8px;
+            font-size: 0.92rem;
+            padding: 8px 14px;
+            border-radius: 12px;
+            background: #f0f5fe;
+            color: #00407a;
+            line-height: 1.4;
+        }
+        .feedback.correct {
+            background: #ddf0e6;
+            color: #105a34;
+        }
+        .feedback.wrong {
+            background: #fae2e2;
+            color: #9e2b2b;
+        }
+        .feedback .answer-reveal {
+            font-weight: 600;
+        }
+
+        /* 超时提示 */
+        .timeout-overlay {
+            background: #fdf2f2;
+            border: 2px solid #b33c3c;
+            border-radius: 16px;
+            padding: 14px 20px;
+            margin-bottom: 22px;
+            text-align: center;
+            font-weight: 600;
+            color: #b33c3c;
+            font-size: 1.05rem;
+        }
+
+        /* 底部按钮组 */
+        .reset-area {
+            margin-top: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .reset-area .btn {
+            flex: 1 1 auto;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+            color: #5f7a99;
+            font-size: 0.78rem;
+            border-top: 1px solid #d3e0ed;
+            padding-top: 20px;
+            line-height: 1.5;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 600px) {
+            body { padding: 12px 10px 24px; }
+            h1 { font-size: 1.25rem; padding-left: 12px; }
+            .timer-badge { font-size: 0.85rem; padding: 4px 12px; }
+            .sub { font-size: 0.82rem; padding-left: 16px; }
+            .stats-bar { padding: 10px 12px; gap: 8px; }
+            .stats span { font-size: 0.7rem; padding: 3px 10px; }
+            .filter-btn { font-size: 0.7rem; padding: 4px 10px; }
+            .question-card { padding: 14px 14px 16px; }
+            .q-text { font-size: 0.92rem; }
+            .option-item { padding: 10px 12px; }
+            .option-text { font-size: 0.88rem; }
+            .btn { font-size: 0.8rem; padding: 6px 16px; min-height: 40px; }
+            .feedback { font-size: 0.85rem; padding: 6px 12px; }
+            .reset-area .btn { min-width: 80px; }
+        }
+        @media (max-width: 400px) {
+            .header-row { flex-direction: column; align-items: stretch; }
+            .timer-badge { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 头部 -->
+    <div class="header-row">
+        <h1>⚓ 汕尾市2026 · 技能竞赛</h1>
+        <span class="timer-badge" id="timerDisplay">⏱️ 20:00</span>
+    </div>
+    <div class="sub">复习题库 · 单选58题 + 多选31题 · 多选需点击「提交」</div>
+
+    <!-- 统计栏 -->
+    <div class="stats-bar">
+        <div class="stats">
+            <span>📝 总题 <span class="num" id="totalCount">89</span></span>
+            <span>✅ 已答 <span class="num" id="answeredCount">0</span></span>
+            <span>🎯 正确 <span class="num" id="correctCount">0</span></span>
+        </div>
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="single">单选</button>
+            <button class="filter-btn" data-filter="multi">多选</button>
+            <button class="filter-btn" data-filter="unanswered">未答</button>
+        </div>
+    </div>
+
+    <!-- 超时提示 -->
+    <div id="timeoutMessage" style="display:none;" class="timeout-overlay">
+        ⏰ 时间到！答题已锁定，请查看结果。
+    </div>
+
+    <!-- 题目列表 -->
+    <div id="questionList"></div>
+
+    <!-- 底部按钮 -->
+    <div class="reset-area">
+        <button class="btn btn-outline" id="resetProgressBtn">🔄 重置进度</button>
+        <button class="btn btn-outline" id="resetAllBtn">🗑️ 清空所有</button>
+        <button class="btn btn-primary" id="restartTimerBtn">⏱️ 重新计时</button>
+    </div>
+    <div class="footer">点击选项自测 · 绿色=正确 红色=错误 · 多选需点击「提交答案」</div>
+</div>
+
+<script>
+    (function() {
+        // ===== 原始数据 (单选58题 + 多选31题) =====
+        const rawQuestions = [
+            // 单选 1~58
+            { id: 1, type: 'single', text: '推动海洋经济高质量发展要坚持 "五个更加注重"，下列不属于的是（  ）', options: ['A. 更加注重创新驱动', 'B. 更加注重人海和谐', 'C. 更加注重规模速度', 'D. 更加注重合作共赢'], answer: 'C' },
+            { id: 2, type: 'single', text: '发展海洋经济、海洋科研是推动我们（  ）很重要的一个方面，一定要抓好。', options: ['A. 强国战略', 'B. 经济增长', 'C. 外贸出口', 'D. 民生改善'], answer: 'A' },
+            { id: 3, type: 'single', text: '习近平总书记强调，建设海洋强国必须大力发展（  ）', options: ['A. 海洋传统产业', 'B. 海洋高新技术', 'C. 海洋捕捞业', 'D. 海洋旅游业'], answer: 'B' },
+            { id: 4, type: 'single', text: '习近平总书记提出的海洋经济 "五个更加注重" 不包括（  ）', options: ['A. 创新驱动', 'B. 高效协同', 'C. 产业规模', 'D. 人海和谐'], answer: 'C' },
+            { id: 5, type: 'single', text: '向海图强的核心是（  ）', options: ['A. 扩大捕捞', 'B. 海洋科技自立自强', 'C. 增加港口数量', 'D. 发展滨海旅游'], answer: 'B' },
+            { id: 6, type: 'single', text: '习近平总书记强调，发展决不能以牺牲人的生命为代价，这必须作为一条（  ）', options: ['A. 弹性要求', 'B. 不可逾越的红线', 'C. 参考标准', 'D. 阶段性规定'], answer: 'B' },
+            { id: 7, type: 'single', text: '各级党委和政府必须把安全生产摆到重要位置，树牢（  ）理念。', options: ['A. 效益优先', 'B. 安全发展', 'C. 速度第一', 'D. 成本可控'], answer: 'B' },
+            { id: 8, type: 'single', text: '落实安全生产责任制，要做到（  ）、"一岗双责"、齐抓共管、失职追责。', options: ['A. 党政同责', 'B. 企业主责', 'C. 政府主责', 'D. 部门专责'], answer: 'A' },
+            { id: 9, type: 'single', text: '习近平总书记强调，安全生产要做到警钟长鸣，用事故教训推动安全生产工作，做到"（  ）"。', options: ['A. 一地出事故、全国受教育', 'B. 一厂出事故、万厂受教育，一地有隐患、全国受警示', 'C. 一厂出事故、全国受教育', 'D. 一地有隐患、万厂受警示'], answer: 'B' },
+            { id: 10, type: 'single', text: '安全生产红线是指（  ）', options: ['A. 不能发生死亡事故', 'B. 不能以牺牲安全为代价发展', 'C. 必须零事故', 'D. 必须投入安全经费'], answer: 'B' },
+            { id: 11, type: 'single', text: '《海上交通安全法》最新修订施行时间是（  ）', options: ['A. 2016 年', 'B. 2018 年', 'C. 2020 年', 'D. 2021 年'], answer: 'D' },
+            { id: 12, type: 'single', text: '海上交通安全工作坚持（  ）、预防为主、便利通行、依法管理原则。', options: ['A. 安全第一', 'B. 效率优先', 'C. 服务优先', 'D. 管控优先'], answer: 'A' },
+            { id: 13, type: 'single', text: '在中华人民共和国（  ）内从事航行、停泊、作业等活动，适用《海上交通安全法》。', options: ['A. 领海', 'B. 管辖海域', 'C. 内水', 'D. 专属经济区'], answer: 'B' },
+            { id: 14, type: 'single', text: '海上交通事故发生后，当事船舶应立即向（  ）报告。', options: ['A. 就近海事管理机构', 'B. 港口企业', 'C. 船公司', 'D. 边防部门'], answer: 'A' },
+            { id: 15, type: 'single', text: '国家实行捕捞许可证制度，捕捞许可证由（  ）发放。', options: ['A. 生态环境部', 'B. 农业农村部（渔业主管部门）', 'C. 海事部门', 'D. 自然资源部门'], answer: 'B' },
+            { id: 16, type: 'single', text: '禁渔期、禁渔区由（  ）规定。', options: ['A. 县级政府', 'B. 省级政府', 'C. 国家渔业主管部门', 'D. 地方渔业部门'], answer: 'C' },
+            { id: 17, type: 'single', text: '船舶发生油类火灾，最适宜优先使用的灭火器材是（  ）', options: ['A. 清水', 'B. 泡沫灭火器', 'C. 干粉灭火器', 'D. 二氧化碳灭火器'], answer: 'B' },
+            { id: 18, type: 'single', text: '环境保护坚持保护优先、预防为主、综合治理、（  ）、损害担责的原则。', options: ['A. 政府负责', 'B. 公众参与', 'C. 企业负责', 'D. 部门联动'], answer: 'B' },
+            { id: 19, type: 'single', text: '根据《中华人民共和国环境保护法》，每年（  ）为环境日。', options: ['A. 3月12日', 'B. 4月22日', 'C. 6月5日', 'D. 7月11日'], answer: 'C' },
+            { id: 20, type: 'single', text: '国家在重点生态功能区、生态环境敏感区和脆弱区等区域划定（  ）。', options: ['A. 开发红线', 'B. 生态保护红线', 'C. 建设红线', 'D. 管理红线'], answer: 'B' },
+            { id: 21, type: 'single', text: '生态保护红线内（  ）', options: ['A. 禁止开发建设', 'B. 限制开发建设', 'C. 可以适度开发', 'D. 无特殊限制'], answer: 'A' },
+            { id: 22, type: 'single', text: '《国际海上避碰规则》适用范围是（  ）', options: ['A. 公海', 'B. 连接公海并可供海船航行的一切水域', 'C. 领海', 'D. 内水'], answer: 'B' },
+            { id: 23, type: 'single', text: '两机动船对遇时，应（  ）', options: ['A. 各自向右避让', 'B. 各自向左避让', 'C. 一船停船', 'D. 一船减速'], answer: 'A' },
+            { id: 24, type: 'single', text: '帆船与机动船相遇，机动船应（  ）', options: ['A. 让路', 'B. 保速保向', 'C. 鸣放信号', 'D. 加速通过'], answer: 'A' },
+            { id: 25, type: 'single', text: '船舶发生电器火灾，断电后优先选用哪种灭火器扑救最合适（  ）', options: ['A. 清水灭火器', 'B. 泡沫灭火器', 'C. 二氧化碳灭火器', 'D. 沙土'], answer: 'C' },
+            { id: 26, type: 'single', text: '船舶消防原则是（  ）', options: ['A. 先控制、后消灭', 'B. 先灭火、后控制', 'C. 先撤离、后报告', 'D. 先报告、后灭火'], answer: 'A' },
+            { id: 27, type: 'single', text: '船舶消防工作的基本方针是（  ）。', options: ['A. "安全第一、预防为主"', 'B. "预防为主、防消结合"', 'C. "以防为主、以消为辅"', 'D. "全员消防、重在预防"'], answer: 'B' },
+            { id: 28, type: 'single', text: '使用二氧化碳灭火器灭火时，应喷向火的_______部位。', options: ['A. 周围', 'B. 上部', 'C. 根部', 'D. 以上都对'], answer: 'C' },
+            { id: 29, type: 'single', text: '船舶固定式CO₂钢瓶的重量在减少_______以上时，应重新充装。', options: ['A. 5%', 'B. 10%', 'C. 15%', 'D. 20%'], answer: 'B' },
+            { id: 30, type: 'single', text: '油火不能用（  ）扑救。', options: ['A. 泡沫', 'B. 二氧化碳', 'C. 水', 'D. 干粉'], answer: 'C' },
+            { id: 31, type: 'single', text: '船舶进入渔船密集区，应（  ）', options: ['A. 保持自动舵', 'B. 改用手操舵', 'C. 加速通过', 'D. 减速至微速'], answer: 'B' },
+            { id: 32, type: 'single', text: '商渔船避让应坚持（  ）原则。', options: ['A. 早、大、宽、清', 'B. 早、大、宽、让', 'C. 早、宽、清、让', 'D. 大、宽、清、停'], answer: 'A' },
+            { id: 33, type: 'single', text: '根据防范商渔船碰撞要求，商船在开阔水域与渔船的最小会遇距离应不小于（  ）。', options: ['A. 0.5海里', 'B. 1海里', 'C. 1.5海里', 'D. 2海里'], answer: 'B' },
+            { id: 34, type: 'single', text: '根据防范商渔船碰撞要求，碰撞不可避免时应尽可能（  ），避免船首撞击渔船侧面。', options: ['A. 加速通过', 'B. 降低船速', 'C. 急转航向', 'D. 倒车'], answer: 'B' },
+            { id: 35, type: 'single', text: '商渔船碰撞高发时段是（  ）', options: ['A. 白天', 'B. 黄昏、夜间、凌晨', 'C. 大风天', 'D. 晴天'], answer: 'B' },
+            { id: 36, type: 'single', text: '商船发现渔船突然横穿，应（  ）', options: ['A. 加速通过', 'B. 立即减速、停车、倒车', 'C. 鸣放信号继续航行', 'D. 转向避让'], answer: 'B' },
+            { id: 37, type: 'single', text: '航行中避让渔船，下列做法错误的是（  ）', options: ['A. 提前减速，谨慎瞭望', 'B. 近距离快速从渔船船队中间穿越', 'C. 远离渔网作业区域', 'D. 主动鸣笛示意，保持安全横距'], answer: 'B' },
+            { id: 38, type: 'single', text: '被追越船应（  ）', options: ['A. 主动让路', 'B. 保速保向', 'C. 减速', 'D. 停车'], answer: 'B' },
+            { id: 39, type: 'single', text: '交通运输部海事局 "一指南六指引" 中的 "一指南" 是（  ）', options: ['A. 《航运企业落实安全生产主体责任指南》', 'B. 《船舶安全管理指南》', 'C. 《船员安全培训指南》', 'D. 《港口安全管理指南》'], answer: 'A' },
+            { id: 40, type: 'single', text: '"一指南六指引"制度体系的核心目标是（  ）。', options: ['A. 降低航运企业运营成本', 'B. 建立健全与水上交通实际相适应的安全生产管理制度', 'C. 统一全国航运安全管理标准', 'D. 提高船舶航行速度'], answer: 'B' },
+            { id: 41, type: 'single', text: '"一指南六指引" 适用对象是（  ）', options: ['A. 航运企业', 'B. 港口企业', 'C. 船员培训机构', 'D. 以上都是'], answer: 'A' },
+            { id: 42, type: 'single', text: '依据海事局 "一指南六指引" 文件，航运企业主体责任指南核心是（  ）', options: ['A. 强化风险管控', 'B. 加强船员培训', 'C. 完善管理制度', 'D. 规范应急处置'], answer: 'A' },
+            { id: 43, type: 'single', text: '"一指南六指引" 发布单位是（  ）', options: ['A. 交通运输部海事局', 'B. 交通运输部', 'C. 应急管理部', 'D. 农业农村部'], answer: 'A' },
+            { id: 44, type: 'single', text: '"一指南六指引" 重点遏制（  ）等典型事故。', options: ['A. 船舶火灾', 'B. 商渔船碰撞', 'C. 船舶搁浅', 'D. 以上都是'], answer: 'B' },
+            { id: 45, type: 'single', text: '"一指南六指引" 强调建立（  ）双重预防机制。', options: ['A. 风险分级管控与隐患排查治理', 'B. 安全检查与应急演练', 'C. 教育培训与责任落实', 'D. 设备维护与人员管理'], answer: 'A' },
+            { id: 46, type: 'single', text: '航运企业安全生产主体责任指南要求强化（  ）', options: ['A. 岸基值班值守', 'B. 船舶自主管理', 'C. 船员自我约束', 'D. 港口协同管理'], answer: 'A' },
+            { id: 47, type: 'single', text: '全国 "安全生产月" 活动固定在每年（  ）', options: ['A. 5 月', 'B. 6 月', 'C. 7 月', 'D. 8 月'], answer: 'B' },
+            { id: 48, type: 'single', text: '我国第一个安全生产月始于哪一年？', options: ['A. 2002年', 'B. 2003年', 'C. 2004年', 'D. 2005年'], answer: 'A' },
+            { id: 49, type: 'single', text: '汕尾陆丰后湖海上风电场区域，国内标志性风渔融合大型智能养殖平台是（  ）', options: ['A. 华润深蓝 1 号', 'B. 汕尾伏羲 1 号', 'C. 汕尾品清 1 号', 'D. 汕尾澎湖 1 号'], answer: 'B' },
+            { id: 50, type: 'single', text: '下列哪个海湾属于汕尾市管辖？（  ）', options: ['A. 大亚湾', 'B. 红海湾', 'C. 海陵湾', 'D. 水东湾'], answer: 'B' },
+            { id: 51, type: 'single', text: '下列属于汕尾特色主要水产品的是（  ）', options: ['A. 大黄鱼', 'B. 马鲛鱼', 'C. 大闸蟹', 'D. 小龙虾'], answer: 'B' },
+            { id: 52, type: 'single', text: '海上遇险报警电话是多少？', options: ['A. 12395', 'B. 119', 'C. 95110', 'D. 12345'], answer: 'A' },
+            { id: 53, type: 'single', text: '根据海上救生理论，人员在海上漂泊时，首要的生存原则是（  ）。', options: ['A. 保持体力等待救援', 'B. 保存体温防止失温', 'C. 收集淡水和食物', 'D. 发出求救信号'], answer: 'B' },
+            { id: 54, type: 'single', text: '根据修订后的《海上交通安全法》，以下哪项不属于该法规定的船舶管理制度？', options: ['A. 船舶检验制度', 'B. 国籍登记制度', 'C. 船舶吨税制度', 'D. 船舶安全和防污染管理制度'], answer: 'C' },
+            { id: 55, type: 'single', text: '渔民在收到海事、海洋综合执法等部门发布的预警信息后，应该怎么做？', options: ['A. 不予理会，继续作业', 'B. 立即停止作业，尽快回港或前往安全水域避风', 'C. 观望其他渔船动向', 'D. 只在风很大时考虑避风'], answer: 'B' },
+            { id: 56, type: 'single', text: '我国南海海域伏季休渔期的统一休渔时间为（  ）', options: ['A. 每年5月1日12时至8月16日12时', 'B. 每年4月1日12时至7月16日12时', 'C. 每年6月1日12时至9月16日12时', 'D. 每年5月1日12时至9月1日12时'], answer: 'A' },
+            { id: 57, type: 'single', text: '船舶在海上航行、停泊、作业期间，应当持续值守国际通用海上遇险与安全通信VHF值守频道为（  ）', options: ['A. VHF06频道', 'B. VHF16频道', 'C. VHF70频道', 'D. VHF88频道'], answer: 'B' },
+            { id: 58, type: 'single', text: '2026 年 "安全生产月" 主题是（  ）', options: ['A. 人人讲安全、个个会应急 ------ 畅通生命通道', 'B. 人人讲安全、个个会应急 ------ 查找身边安全隐患', 'C. 人人讲安全、个个会应急 ------ 排查整治风险隐患', 'D. 人人讲安全、个个会应急 ------ 筑牢安全防护防线'], answer: 'C' },
+            // 多选 1~31
+            { id: 59, type: 'multi', text: '中央财经委员会第六次会议提出海洋经济高质量发展 "五个更加注重"，下列属于核心要求的有（  ）', options: ['A. 更加注重创新驱动', 'B. 更加注重人海和谐', 'C. 更加注重规模提升', 'D. 更加注重合作共赢'], answer: 'ABD' },
+            { id: 60, type: 'multi', text: '总书记强调安全生产不可逾越的红线与责任体系要求，正确的是（  ）', options: ['A. 发展决不能以牺牲人的生命为代价', 'B. 隐患可结合现场实际情况延后开展全面排查', 'C. 落实党政同责、"一岗双责"、齐抓共管', 'D. 坚持人民至上、生命至上'], answer: 'ACD' },
+            { id: 61, type: 'multi', text: '海上交通安全工作法定基本原则包含（  ）', options: ['A. 安全第一、预防为主', 'B. 便利通行、依法管理', 'C. 兼顾航行效率，可适度优先考量短期经济效益', 'D. 保障海上交通有序畅通'], answer: 'ABD' },
+            { id: 62, type: 'multi', text: '我国法律明确禁止的渔业捕捞行为有（  ）', options: ['A. 根据个人作业经验灵活选用合规网具开展捕捞养殖', 'B. 禁渔区、禁渔期违规捕捞', 'C. 炸鱼、毒鱼、电鱼破坏性捕捞', 'D. 使用小于法定最小网目尺寸渔具捕捞'], answer: 'BCD' },
+            { id: 63, type: 'multi', text: '海洋开发活动需遵守的生态环保义务有（  ）', options: ['A. 海洋油气平台残油、废油统一回收，禁止直排', 'B. 未经许可不得向管辖海域倾倒废弃物', 'C. 近海养殖可结合海域自净能力适度放宽尾水排放标准', 'D. 落实陆海统筹，管控陆源入海污染物'], answer: 'ABD' },
+            { id: 64, type: 'multi', text: '船舶保持正规瞭望的合法观测手段包含（  ）', options: ['A. 视觉瞭望、听觉守听', 'B. AIS', 'C. 雷达', 'D. VHF16 频道持续值守沟通'], answer: 'ABCD' },
+            { id: 65, type: 'multi', text: '交叉相遇局面下让路船合规避让措施有（  ）', options: ['A. 及早大幅度转向，明确避让意图', 'B. 采用安全航速，预留避让余量', 'C. 提前预判碰撞风险，主动宽裕让清', 'D. 近距离小角度微调航向'], answer: 'ABC' },
+            { id: 66, type: 'multi', text: '根据避碰规则，船舶在下列哪些情况下应使用安全航速？（  ）', options: ['A. 能见度良好时', 'B. 能见度不良时', 'C. 船舶密集水域', 'D. 狭水道'], answer: 'ABCD' },
+            { id: 67, type: 'multi', text: '海上人员落水基础救生处置要求包括（  ）', options: ['A. 立即报告海事、投放救生圈、启动搜救', 'B. 稳定落水者体征，规范心肺复苏操作', 'C. 现场紧急情况下，船员可直接跳海靠近施救落水人员', 'D. 协调周边就近船舶协同救助'], answer: 'ABD' },
+            { id: 68, type: 'multi', text: '商船驶入渔船密集区前置防范措施有（  ）', options: ['A. 途经小型渔区可临时关闭 AIS 提升航行效率', 'B. 全面检测雷达、AIS、VHF 通信设备', 'C. 航前核查渔场分布，优化航行计划', 'D. 驾驶台双人值班，保持连续正规瞭望'], answer: 'BCD' },
+            { id: 69, type: 'multi', text: '商渔共治专项行动重点管控高风险时段包含（  ）', options: ['A. 凌晨 0---4 时事故高发"黑色四小时"', 'B. 日落黄昏视线受限时段', 'C. 开渔期、休渔转换关键节点'], answer: 'ABC' },
+            { id: 70, type: 'multi', text: '关于"一指南六指引"制度体系在航运企业中的落实要求，以下说法正确的有（  ）。', options: ['A. 企业需将"一指南六指引"转化为内部管理制度', 'B. 企业需将"一指南六指引"转化为船岸实操流程', 'C. "一指南六指引"仅作为参考文件，企业需结合实际情况执行', 'D. "一指南六指引"仅适用于国有航运企业'], answer: 'AB' },
+            { id: 71, type: 'multi', text: '"一指南六指引" 体系建设目标包含（  ）', options: ['A. 实现安全管理从被动处置转向源头主动预防', 'B. 覆盖航运企业全流程、全岗位安全管控', 'C. 简化岸基值班值守，降低企业经营成本', 'D. 提升船舶本质安全与船员履职能力'], answer: 'ABD' },
+            { id: 72, type: 'multi', text: '安全生产月固定标准化活动内容有（  ）', options: ['A. 6 月 16 日安全宣传咨询日集中宣教', 'B. 安全宣传五进（企业、农村、社区、学校、家庭）', 'C. 开展隐患排查、应急演练等实战活动', 'D. 事故警示教育、全民安全公开课学习'], answer: 'ABCD' },
+            { id: 73, type: 'multi', text: '对 "五个更加注重" 辩证逻辑关系表述正确的有（  ）', options: ['A. 创新驱动是核心动力，支撑产业迭代升级', 'B. 人海和谐是发展底线，划定生态开发红线', 'C. 高效协同要求陆海统筹、区域一体化协同发展', 'D. 合作共赢拓展蓝色经济国际合作空间'], answer: 'ABCD' },
+            { id: 74, type: 'multi', text: '建设海洋强国背景下海洋渔业转型升级方向包含（  ）', options: ['A. 深远海智能养殖、智慧渔业数字化改造', 'B. 海洋碳汇、蓝色生态经济新业态培育', 'C. 渔业装备国产化、高端海洋装备自主研发', 'D. 依托近海资源适度扩大传统捕捞作业规模'], answer: 'ABC' },
+            { id: 75, type: 'multi', text: '下列属于船员基本安全培训内容的有（  ）', options: ['A. 海上求生', 'B. 防火与灭火基础', 'C. 基本急救', 'D. 个人安全与社会责任'], answer: 'ABCD' },
+            { id: 76, type: 'multi', text: '船舶发生搁浅险情，正确处置措施有（  ）', options: ['A. 立即停车、严禁盲目倒车或冲滩', 'B. 迅速测量四周水深，判断搁浅部位', 'C. 第一时间上报就近海事管理机构', 'D. 立即抛多只船锚强行脱浅'], answer: 'ABC' },
+            { id: 77, type: 'multi', text: '海上作业需提前向海事报备审批的活动有（  ）', options: ['A. 航道疏浚、沉船打捞作业', 'B. 划定临时禁航区', 'C. 水上施工', 'D. 大型海上娱乐活动、水上赛事'], answer: 'ABCD' },
+            { id: 78, type: 'multi', text: '船舶消防中，灭火的基本方法包括（  ）。', options: ['A. 冷却法', 'B. 窒息法', 'C. 隔离法', 'D. 抑制法'], answer: 'ABCD' },
+            { id: 79, type: 'multi', text: '中华人民共和国海事局防范商渔船碰撞通告中要求的措施包括（  ）。', options: ['A. 召开航行安全会议', 'B. 确保驾驶台所有航行值班人员知晓渔船作业特点', 'C. 评估碰撞风险、优化避让方案', 'D. 减少驾驶台值班人员以降低疲劳'], answer: 'ABC' },
+            { id: 80, type: 'multi', text: '"一指南六指引"制度体系通过以下哪些方式让企业"照单防风险"？（  ）', options: ['A. 规范岸基值班', 'B. 航次风险评估', 'C. 高风险作业"双把关"程序', 'D. 提高船舶航行速度'], answer: 'ABC' },
+            { id: 81, type: 'multi', text: '船舶机舱油类火灾正确处置措施有（  ）。', options: ['A. 切断燃油供给', 'B. 使用泡沫系统灭火', 'C. 用水直接喷射油火', 'D. 隔离燃烧区域'], answer: 'ABD' },
+            { id: 82, type: 'multi', text: '航运企业安全生产双重预防机制是（  ）。', options: ['A. 风险分级管控', 'B. 隐患排查治理', 'C. 员工考勤管理', 'D. 船舶油耗管控'], answer: 'AB' },
+            { id: 83, type: 'multi', text: '不能确保在安全通过的情况下，应果断采取哪些措施？（  ）', options: ['A. 备车', 'B. 减速', 'C. 加速', 'D. 转向'], answer: 'AB' },
+            { id: 84, type: 'multi', text: '根据《中华人民共和国环境保护法》，政府应承担的环保责任包括（  ）。', options: ['A. 对本行政区域的环境质量负责', 'B. 改善环境质量', 'C. 加大财政投入', 'D. 加强环境保护宣传和普及工作'], answer: 'ABCD' },
+            { id: 85, type: 'multi', text: '船舶海洋污染防治硬性规定有（  ）。', options: ['A. 生活污水、洗舱水达标后方可排放', 'B. 废旧船舶燃油、危废岸上合规处置', 'C. 船舶生活垃圾直接倾倒近海海域', 'D. 油类作业全程布设防污染围控设施'], answer: 'ABD' },
+            { id: 86, type: 'multi', text: '直航船在何种情况下需主动采取避让行动（  ）。', options: ['A. 让路船明显拒不履行避让义务', 'B. 碰撞危险迫在眉睫，紧迫局面形成', 'C. 无论态势如何，直航船永远无需转向', 'D. 环境受限无法等待让路船行动'], answer: 'ABD' },
+            { id: 87, type: 'multi', text: '弃船逃生合规操作要求有（  ）。', options: ['A. 慌乱跳海、单独游离搜救区域', 'B. 优先疏散老弱、乘客，船员最后撤离', 'C. 全员穿戴救生衣，有序登乘救生艇筏', 'D. 留存船舶关键航行数据，上报海事'], answer: 'BCD' },
+            { id: 88, type: 'multi', text: '渔船防范碰撞主体责任落实内容有（  ）。', options: ['A. 全程开启北斗、AIS 导航通信设备', 'B. VHF16 频道常态化守听商船动态', 'C. 航道主航路内禁止抛锚、拖网作业', 'D. 开渔前开展避碰安全专项培训'], answer: 'ABCD' },
+            { id: 89, type: 'multi', text: '根据《防范商渔船碰撞工作指引》，船舶途经渔船作业水域，应当严格保持安全通过距离，下列关于安全避让距离说法正确的有（  ）', options: ['A. 在开阔水域，应保持1海里以上安全距离通过', 'B. 在开阔水域，应保持2海里以上安全距离通过', 'C. 在渔船密集作业区，应保持0.5海里以上安全距离通过', 'D. 在渔船密集作业区，应保持1海里以上安全距离通过'], answer: 'AC' }
+        ];
+
+        // ===== 状态 =====
+        let questions = rawQuestions.map(q => ({
+            ...q,
+            userAnswer: null,
+            answered: false,
+            correct: null,
+        }));
+
+        let currentFilter = 'all';
+        let timerSeconds = 20 * 60;
+        let timerInterval = null;
+        let isTimeUp = false;
+
+        // DOM
+        const container = document.getElementById('questionList');
+        const totalSpan = document.getElementById('totalCount');
+        const answeredSpan = document.getElementById('answeredCount');
+        const correctSpan = document.getElementById('correctCount');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timeoutMessage = document.getElementById('timeoutMessage');
+
+        // ===== 计时器 =====
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            timerDisplay.textContent = `⏱️ ${formatTime(timerSeconds)}`;
+            timerDisplay.classList.toggle('warning', timerSeconds <= 60);
+        }
+
+        function stopTimer() {
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        }
+
+        function startTimer() {
+            stopTimer();
+            if (timerSeconds <= 0) {
+                timerSeconds = 20 * 60;
+                isTimeUp = false;
+                timeoutMessage.style.display = 'none';
+                render();
+            }
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                if (timerSeconds <= 0) {
+                    timerSeconds = 0;
+                    updateTimerDisplay();
+                    isTimeUp = true;
+                    stopTimer();
+                    timeoutMessage.style.display = 'block';
+                    render();
+                }
+            }, 1000);
+        }
+
+        function restartTimer() {
+            stopTimer();
+            timerSeconds = 20 * 60;
+            isTimeUp = false;
+            timeoutMessage.style.display = 'none';
+            updateTimerDisplay();
+            startTimer();
+            render();
+        }
+
+        // ===== 辅助 =====
+        function normalizeAnswer(ans) {
+            if (!ans) return [];
+            if (Array.isArray(ans)) return ans.map(s => s.trim().toUpperCase()).filter(Boolean);
+            if (typeof ans === 'string') return ans.split('').map(s => s.trim().toUpperCase()).filter(Boolean);
+            return [];
+        }
+
+        function isAnswerCorrect(q) {
+            if (!q.answered || q.userAnswer == null) return false;
+            const correct = normalizeAnswer(q.answer);
+            const user = normalizeAnswer(q.userAnswer);
+            if (q.type === 'single') {
+                return user.length === 1 && correct.length === 1 && user[0] === correct[0];
+            }
+            if (user.length !== correct.length) return false;
+            const su = [...user].sort(), sc = [...correct].sort();
+            return su.every((v, i) => v === sc[i]);
+        }
+
+        function computeStats() {
+            const total = questions.length;
+            const answered = questions.filter(q => q.answered).length;
+            const correct = questions.filter(q => q.correct === true).length;
+            totalSpan.textContent = total;
+            answeredSpan.textContent = answered;
+            correctSpan.textContent = correct;
+        }
+
+        function getFilteredQuestions() {
+            if (currentFilter === 'all') return questions;
+            if (currentFilter === 'single') return questions.filter(q => q.type === 'single');
+            if (currentFilter === 'multi') return questions.filter(q => q.type === 'multi');
+            if (currentFilter === 'unanswered') return questions.filter(q => !q.answered);
+            return questions;
+        }
+
+        // ===== 渲染 =====
+        function render() {
+            const filtered = getFilteredQuestions();
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="padding: 30px 16px; text-align:center; color: #4f6f8f;">没有符合条件的题目</div>`;
+                computeStats();
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((q) => {
+                const realIndex = questions.indexOf(q);
+                const isSingle = q.type === 'single';
+                const typeLabel = isSingle ? '单选' : '多选';
+                const typeClass = isSingle ? 'single' : 'multi';
+
+                const userAns = q.userAnswer ? normalizeAnswer(q.userAnswer) : [];
+                const correctAns = normalizeAnswer(q.answer);
+                const shouldDisable = isTimeUp && !q.answered;
+
+                let optionsHtml = '';
+                q.options.forEach((optText, oi) => {
+                    const letter = String.fromCharCode(65 + oi);
+                    const isSelected = userAns.includes(letter);
+                    let extraClass = '';
+                    let disabled = false;
+
+                    if (q.answered || shouldDisable) {
+                        disabled = true;
+                        const isCorrectOpt = correctAns.includes(letter);
+                        if (isSelected && isCorrectOpt) extraClass = 'correct-answer';
+                        else if (isSelected && !isCorrectOpt) extraClass = 'wrong-answer';
+                        else if (!isSelected && isCorrectOpt) extraClass = 'correct-answer';
+                    } else {
+                        if (isSelected) extraClass = 'selected';
+                    }
+
+                    optionsHtml += `
+                        <div class="option-item ${extraClass} ${disabled ? 'disabled' : ''}" data-qidx="${realIndex}" data-letter="${letter}">
+                            <span class="option-marker">${letter}.</span>
+                            <span class="option-text">${optText.replace(/^[A-D]\.\s*/, '')}</span>
+                        </div>
+                    `;
+                });
+
+                let feedbackHtml = '';
+                if (q.answered) {
+                    const isCorrect = q.correct;
+                    const fbClass = isCorrect ? 'correct' : 'wrong';
+                    const correctDisplay = correctAns.join('、');
+                    let msg = isCorrect ? '✅ 回答正确' : '❌ 回答错误';
+                    feedbackHtml = `
+                        <div class="feedback ${fbClass}">
+                            <span class="answer-reveal">${msg}</span> 
+                            ${!isCorrect ? ` 正确答案：${correctDisplay}` : ''}
+                            ${isSingle ? '' : ` (选 ${correctDisplay})`}
+                        </div>
+                    `;
+                } else if (shouldDisable) {
+                    const correctDisplay = correctAns.join('、');
+                    feedbackHtml = `
+                        <div class="feedback wrong">
+                            <span class="answer-reveal">⏰ 时间到</span> 正确答案：${correctDisplay}
+                        </div>
+                    `;
+                }
+
+                let cardExtra = '';
+                if (q.answered && q.correct === true) cardExtra = 'correct-highlight';
+                else if (q.answered && q.correct === false) cardExtra = 'wrong-highlight';
+                else if (shouldDisable && !q.answered) cardExtra = 'wrong-highlight';
+
+                let submitArea = '';
+                if (q.type === 'multi' && !q.answered && !shouldDisable) {
+                    const hasSelection = q.userAnswer && q.userAnswer.length > 0;
+                    submitArea = `
+                        <div class="multi-submit-area">
+                            <button class="btn btn-primary submit-multi" data-qidx="${realIndex}" ${!hasSelection ? 'disabled' : ''}>📤 提交答案</button>
+                            <span class="hint">${hasSelection ? '已选 ' + userAns.join(', ') : '请至少选择一个选项'}</span>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="question-card ${cardExtra}" data-qidx="${realIndex}">
+                        <div class="q-header">
+                            <span class="q-type ${typeClass}">${typeLabel}</span>
+                            <span style="font-size:0.8rem; color:#3f6185;">#${realIndex+1}</span>
+                        </div>
+                        <div class="q-text">${q.text}</div>
+                        <div class="options" data-qidx="${realIndex}">
+                            ${optionsHtml}
+                        </div>
+                        ${submitArea}
+                        ${feedbackHtml}
+                        <div class="action-row">
+                            <span class="status">${q.answered ? (q.correct ? '✓ 已答' : '✗ 已答') : (shouldDisable ? '⏰ 超时' : '⏳ 未答')}</span>
+                            ${q.answered ? `<button class="btn btn-outline reset-one" data-qidx="${realIndex}" style="padding:4px 14px; font-size:0.78rem; min-height:32px;">↺ 重答</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            computeStats();
+
+            // 事件绑定
+            document.querySelectorAll('.option-item:not(.disabled)').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    if (isTimeUp) return;
+                    const qidx = parseInt(this.dataset.qidx);
+                    const letter = this.dataset.letter;
+                    handleOptionClick(qidx, letter);
+                });
+            });
+
+            document.querySelectorAll('.submit-multi').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    if (isTimeUp) return;
+                    const qidx = parseInt(this.dataset.qidx);
+                    handleMultiSubmit(qidx);
+                });
+            });
+
+            document.querySelectorAll('.reset-one').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const qidx = parseInt(this.dataset.qidx);
+                    resetSingleQuestion(qidx);
+                });
+            });
+        }
+
+        // ===== 交互 =====
+        function handleOptionClick(qidx, letter) {
+            if (isTimeUp) return;
+            const q = questions[qidx];
+            if (!q || q.answered) return;
+
+            if (q.type === 'single') {
+                q.userAnswer = letter;
+                q.answered = true;
+                q.correct = isAnswerCorrect(q);
+                render();
+            } else {
+                if (!q.userAnswer) q.userAnswer = [];
+                const arr = q.userAnswer;
+                const idx = arr.indexOf(letter);
+                if (idx > -1) arr.splice(idx, 1);
+                else arr.push(letter);
+                if (arr.length === 0) q.userAnswer = null;
+                render();
+            }
+        }
+
+        function handleMultiSubmit(qidx) {
+            if (isTimeUp) return;
+            const q = questions[qidx];
+            if (!q || q.answered) return;
+            if (!q.userAnswer || q.userAnswer.length === 0) {
+                alert('请至少选择一个选项');
+                return;
+            }
+            q.answered = true;
+            q.correct = isAnswerCorrect(q);
+            render();
+        }
+
+        function resetSingleQuestion(qidx) {
+            const q = questions[qidx];
+            q.userAnswer = null;
+            q.answered = false;
+            q.correct = null;
+            render();
+        }
+
+        function resetAllProgress() {
+            questions.forEach(q => {
+                q.userAnswer = null;
+                q.answered = false;
+                q.correct = null;
+            });
+            render();
+        }
+
+        function resetAll() {
+            resetAllProgress();
+            restartTimer();
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+            render();
+        }
+
+        // ===== 初始化 =====
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() { setFilter(this.dataset.filter); });
+        });
+
+        document.getElementById('resetProgressBtn').addEventListener('click', resetAllProgress);
+        document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+        document.getElementById('restartTimerBtn').addEventListener('click', restartTimer);
+
+        startTimer();
+        render();
+    })();
+</script>
+</body>
+</html>
