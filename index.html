@@ -2,850 +2,837 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>汕尾市2026水上技能竞赛 · 刷题</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水利水电安全三类人 · 智能组卷（527题随机抽）</title>
     <style>
-        /* 全局重置与基础 */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f4f7fc;
-            padding: 16px 12px 32px;
-            color: #0b1a2f;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-        }
-
-        /* 头部 */
-        .header-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #003366;
-            border-left: 5px solid #1e7bb0;
-            padding-left: 14px;
-            line-height: 1.2;
-            flex: 1;
-            min-width: 180px;
-        }
-        .timer-badge {
-            background: #1a3a5c;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 5px 16px;
-            border-radius: 40px;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0,20,40,0.15);
-            letter-spacing: 0.3px;
-            flex-shrink: 0;
-        }
-        .timer-badge.warning {
-            background: #b33c3c;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
-        .sub {
-            color: #2c4c6b;
-            margin-bottom: 18px;
-            font-size: 0.92rem;
-            padding-left: 20px;
-            opacity: 0.8;
-        }
-
-        /* 统计栏 - 移动端适配 */
-        .stats-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px 16px;
-            background: white;
-            padding: 12px 16px;
-            border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(0,20,40,0.05);
-            margin-bottom: 22px;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
-        }
-        .stats span {
-            background: #eef3f9;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #004080;
-            white-space: nowrap;
-        }
-        .stats .num {
-            font-weight: 700;
-            color: #0b2b4a;
-        }
-        .filter-group {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            background: white;
-            border: 1px solid #cbdae8;
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: #1f3b57;
-            cursor: pointer;
-            transition: 0.15s;
-            touch-action: manipulation;
-        }
-        .filter-btn.active {
-            background: #1a5a8c;
-            border-color: #1a5a8c;
-            color: white;
-        }
-        .filter-btn:active {
-            transform: scale(0.96);
-        }
-
-        /* 题目卡片 */
-        .question-card {
-            background: white;
-            border-radius: 20px;
-            padding: 18px 18px 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.04);
-            border: 1px solid #e6edf6;
-            transition: border 0.15s;
-        }
-        .question-card.correct-highlight {
-            border-left: 6px solid #2a7f4b;
-            background: #f6fbf9;
-        }
-        .question-card.wrong-highlight {
-            border-left: 6px solid #b33c3c;
-            background: #fdf6f6;
-        }
-
-        .q-header {
-            display: flex;
-            gap: 10px;
-            align-items: baseline;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .q-type {
-            font-size: 0.7rem;
-            font-weight: 600;
-            background: #d9e3ef;
-            color: #1f4468;
-            padding: 2px 12px;
-            border-radius: 30px;
-            letter-spacing: 0.2px;
-        }
-        .q-type.single { background: #d4e0f0; }
-        .q-type.multi { background: #d3e8e0; }
-
-        .q-text {
-            font-size: 1rem;
-            line-height: 1.6;
-            font-weight: 500;
-            margin-bottom: 14px;
-            word-break: break-word;
-        }
-
-        /* 选项列表 */
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 10px 0 12px;
-        }
-        .option-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: #f8faff;
-            border: 1px solid #e1eaf3;
-            transition: 0.1s;
-            cursor: pointer;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .option-item:active {
-            transform: scale(0.98);
-        }
-        .option-item.selected {
-            background: #e2edfd;
-            border-color: #6d9fd1;
-        }
-        .option-item.correct-answer {
-            background: #d4f0e2;
-            border-color: #2a7f4b;
-        }
-        .option-item.wrong-answer {
-            background: #fcdede;
-            border-color: #b33c3c;
-        }
-        .option-item.disabled {
-            opacity: 0.75;
-            cursor: default;
-            pointer-events: none;
-        }
-        .option-marker {
-            font-weight: 600;
-            color: #1f4970;
-            min-width: 24px;
-            flex-shrink: 0;
-        }
-        .option-text {
-            flex: 1;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        /* 按钮 */
-        .btn {
-            background: white;
-            border: 1px solid #b7ccdf;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            color: #003366;
-            cursor: pointer;
-            transition: 0.12s;
-            touch-action: manipulation;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            min-height: 44px;
-        }
-        .btn:active {
-            transform: scale(0.96);
-        }
-        .btn-primary {
-            background: #1a5a8c;
-            border-color: #1a5a8c;
-            color: white;
-        }
-        .btn-primary:active { background: #0f4a75; }
-        .btn-outline {
-            background: transparent;
-            border-color: #b0c8df;
-        }
-        .btn-outline:active { background: #eaf1fa; }
-        .btn-success {
-            background: #1f7b4a;
-            border-color: #1f7b4a;
-            color: white;
-        }
-        .btn-success:active { background: #14633b; }
-        .btn-danger {
-            background: #b33c3c;
-            border-color: #b33c3c;
-            color: white;
-        }
-        .btn-danger:active { background: #962e2e; }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .action-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 14px;
-            gap: 10px;
-        }
-        .action-row .status {
-            font-size: 0.8rem;
-            color: #3f6185;
-        }
-
-        /* 多选提交区域 */
-        .multi-submit-area {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .multi-submit-area .btn {
-            padding: 6px 18px;
-            font-size: 0.82rem;
-            min-height: 40px;
-        }
-        .multi-submit-area .hint {
-            font-size: 0.8rem;
-            color: #5f7a99;
-        }
-
-        /* 反馈信息 */
-        .feedback {
-            margin-top: 8px;
-            font-size: 0.92rem;
-            padding: 8px 14px;
-            border-radius: 12px;
-            background: #f0f5fe;
-            color: #00407a;
-            line-height: 1.4;
-        }
-        .feedback.correct {
-            background: #ddf0e6;
-            color: #105a34;
-        }
-        .feedback.wrong {
-            background: #fae2e2;
-            color: #9e2b2b;
-        }
-        .feedback .answer-reveal {
-            font-weight: 600;
-        }
-
-        /* 超时提示 */
-        .timeout-overlay {
-            background: #fdf2f2;
-            border: 2px solid #b33c3c;
-            border-radius: 16px;
-            padding: 14px 20px;
-            margin-bottom: 22px;
-            text-align: center;
-            font-weight: 600;
-            color: #b33c3c;
-            font-size: 1.05rem;
-        }
-
-        /* 底部按钮组 */
-        .reset-area {
-            margin-top: 28px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-        }
-        .reset-area .btn {
-            flex: 1 1 auto;
-            min-width: 100px;
-            justify-content: center;
-        }
-
-        .footer {
-            margin-top: 32px;
-            text-align: center;
-            color: #5f7a99;
-            font-size: 0.78rem;
-            border-top: 1px solid #d3e0ed;
-            padding-top: 20px;
-            line-height: 1.5;
-        }
-
-        /* 移动端优化 */
-        @media (max-width: 600px) {
-            body { padding: 12px 10px 24px; }
-            h1 { font-size: 1.25rem; padding-left: 12px; }
-            .timer-badge { font-size: 0.85rem; padding: 4px 12px; }
-            .sub { font-size: 0.82rem; padding-left: 16px; }
-            .stats-bar { padding: 10px 12px; gap: 8px; }
-            .stats span { font-size: 0.7rem; padding: 3px 10px; }
-            .filter-btn { font-size: 0.7rem; padding: 4px 10px; }
-            .question-card { padding: 14px 14px 16px; }
-            .q-text { font-size: 0.92rem; }
-            .option-item { padding: 10px 12px; }
-            .option-text { font-size: 0.88rem; }
-            .btn { font-size: 0.8rem; padding: 6px 16px; min-height: 40px; }
-            .feedback { font-size: 0.85rem; padding: 6px 12px; }
-            .reset-area .btn { min-width: 80px; }
-        }
-        @media (max-width: 400px) {
-            .header-row { flex-direction: column; align-items: stretch; }
-            .timer-badge { text-align: center; }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: #f0f5fc; padding: 16px; min-height: 100vh; display: flex; justify-content: center; }
+        .app { max-width: 1100px; width: 100%; background: white; border-radius: 28px; box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25); padding: 20px 24px 36px; }
+        h1 { font-size: 24px; font-weight: 600; color: #0b2b3c; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #e6edf4; padding-bottom: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+        h1 small { font-size: 15px; font-weight: 400; color: #2b5e7a; margin-left: auto; background: #e5eef8; padding: 4px 18px; border-radius: 40px; }
+        .stats-grid { display: flex; flex-wrap: wrap; gap: 10px 24px; background: #e9f0f8; padding: 10px 20px; border-radius: 60px; margin-bottom: 22px; align-items: center; font-weight: 500; color: #1e3b4f; font-size: 15px; }
+        .stats-grid span { display: flex; align-items: baseline; gap: 4px; }
+        .stats-grid .num { font-weight: 700; font-size: 20px; color: #005a8c; }
+        .timer-box { margin-left: auto; background: #d1dfee; padding: 2px 18px; border-radius: 40px; font-size: 22px; font-weight: 600; color: #003153; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+        .score-box { background: #1a5f83; color: #fff; padding: 2px 18px; border-radius: 40px; font-size: 18px; font-weight: 600; }
+        .question-panel { margin-top: 4px; }
+        .q-item { background: #ffffff; border: 1px solid #dce5ef; border-radius: 16px; padding: 16px 20px; margin-bottom: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .q-item.correct { border-left: 8px solid #1f8b4c; background: #f5fbf8; }
+        .q-item.wrong { border-left: 8px solid #b33c3c; background: #fdf6f6; }
+        .q-title { display: flex; gap: 10px; font-weight: 600; color: #153243; margin-bottom: 8px; flex-wrap: wrap; align-items: center; font-size: 14px; }
+        .q-type { background: #d1dce8; padding: 0 12px; border-radius: 30px; font-size: 12px; font-weight: 600; color: #1f4057; height: 24px; display: inline-flex; align-items: center; }
+        .q-text { font-size: 15px; line-height: 1.6; color: #1a2d3e; margin-bottom: 10px; }
+        .options { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-left: 2px; margin: 4px 0 2px; }
+        .options label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; background: #f2f7fd; padding: 4px 14px 4px 10px; border-radius: 30px; border: 1px solid transparent; transition: 0.08s; }
+        .options label:hover { background: #e3edf8; border-color: #b0c9df; }
+        .options input[type="radio"], .options input[type="checkbox"] { width: 16px; height: 16px; accent-color: #1c6f9c; cursor: pointer; flex-shrink: 0; }
+        .multi-hint { font-size: 12px; color: #4c6f8a; margin-left: 2px; font-weight: 400; }
+        .correct-answer { margin-top: 6px; font-size: 14px; color: #1a6b3c; background: #e3f3e9; padding: 4px 14px; border-radius: 30px; display: inline-block; font-weight: 500; }
+        .wrong-answer .correct-answer { color: #1a6b3c; background: #e3f3e9; }
+        .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #dce5ef; }
+        .btn { background: white; border: 1px solid #b8ccdf; padding: 8px 28px; border-radius: 60px; font-weight: 600; font-size: 15px; color: #1d4059; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-primary { background: #1a5f83; border-color: #1a5f83; color: white; box-shadow: 0 6px 14px rgba(22,85,130,0.25); }
+        .btn-primary:hover { background: #0f4b6b; transform: scale(1.01); }
+        .btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+        .btn-outline:hover { background: #e8eff8; }
+        .result-stats { background: #e2eef9; border-radius: 40px; padding: 4px 20px; font-weight: 600; color: #003153; display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; }
+        .footer-note { margin-top: 16px; font-size: 13px; color: #4b6d88; text-align: right; }
+        .group-label { font-size: 16px; font-weight: 600; color: #0b2b3c; margin: 20px 0 12px 0; padding: 8px 16px; background: #e9f0f8; border-radius: 30px; display: inline-block; }
+        @media (max-width: 700px) { .app { padding: 12px; } .stats-grid { flex-wrap: wrap; gap: 4px; font-size: 13px; } .timer-box { margin-left: 0; width: 100%; text-align: center; } }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- 头部 -->
-    <div class="header-row">
-        <h1>⚓ 汕尾市2026 · 技能竞赛</h1>
-        <span class="timer-badge" id="timerDisplay">⏱️ 20:00</span>
+<div class="app" id="app">
+    <h1>⚡ 水利水电 · 安全三类人 <small>智能组卷 · 随机抽题</small></h1>
+    <div class="stats-grid">
+        <span>📋 总题 <span class="num" id="totalCount">0</span></span>
+        <span>✏️ 已答 <span class="num" id="answeredCount">0</span></span>
+        <span>✅ 正确 <span class="num" id="correctCount">0</span></span>
+        <span>❌ 错误 <span class="num" id="wrongCount">0</span></span>
+        <span class="score-box" id="scoreDisplay">🏆 0分</span>
+        <span class="timer-box" id="timerDisplay">120:00</span>
     </div>
-    <div class="sub">复习题库 · 单选58题 + 多选31题 · 多选需点击「提交」</div>
-
-    <!-- 统计栏 -->
-    <div class="stats-bar">
-        <div class="stats">
-            <span>📝 总题 <span class="num" id="totalCount">89</span></span>
-            <span>✅ 已答 <span class="num" id="answeredCount">0</span></span>
-            <span>🎯 正确 <span class="num" id="correctCount">0</span></span>
+    <div class="question-panel" id="questionContainer"></div>
+    <div class="action-bar">
+        <div><button class="btn btn-outline" id="resetBtn">⟳ 重新组卷</button></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="result-stats" id="resultStats" style="display:none;">
+                <span>✅ <span id="finalCorrect">0</span></span>
+                <span>❌ <span id="finalWrong">0</span></span>
+                <span>🏆 总分 <span id="finalScore">0</span></span>
+            </span>
+            <button class="btn btn-primary" id="submitBtn">📤 提交批改</button>
         </div>
-        <div class="filter-group">
-            <button class="filter-btn active" data-filter="all">全部</button>
-            <button class="filter-btn" data-filter="single">单选</button>
-            <button class="filter-btn" data-filter="multi">多选</button>
-            <button class="filter-btn" data-filter="unanswered">未答</button>
-        </div>
     </div>
-
-    <!-- 超时提示 -->
-    <div id="timeoutMessage" style="display:none;" class="timeout-overlay">
-        ⏰ 时间到！答题已锁定，请查看结果。
-    </div>
-
-    <!-- 题目列表 -->
-    <div id="questionList"></div>
-
-    <!-- 底部按钮 -->
-    <div class="reset-area">
-        <button class="btn btn-outline" id="resetProgressBtn">🔄 重置进度</button>
-        <button class="btn btn-outline" id="resetAllBtn">🗑️ 清空所有</button>
-        <button class="btn btn-primary" id="restartTimerBtn">⏱️ 重新计时</button>
-    </div>
-    <div class="footer">点击选项自测 · 绿色=正确 红色=错误 · 多选需点击「提交答案」</div>
+    <div class="footer-note">* 从527题中随机抽取：判断20题(1分/题) + 单选52题(1分/题) + 多选20题(2分/题) = 满分112分</div>
 </div>
-
 <script>
-    (function() {
-        // ===== 原始数据 (单选58题 + 多选31题) =====
-        const rawQuestions = [
-            // 单选 1~58
-            { id: 1, type: 'single', text: '推动海洋经济高质量发展要坚持 "五个更加注重"，下列不属于的是（  ）', options: ['A. 更加注重创新驱动', 'B. 更加注重人海和谐', 'C. 更加注重规模速度', 'D. 更加注重合作共赢'], answer: 'C' },
-            { id: 2, type: 'single', text: '发展海洋经济、海洋科研是推动我们（  ）很重要的一个方面，一定要抓好。', options: ['A. 强国战略', 'B. 经济增长', 'C. 外贸出口', 'D. 民生改善'], answer: 'A' },
-            { id: 3, type: 'single', text: '习近平总书记强调，建设海洋强国必须大力发展（  ）', options: ['A. 海洋传统产业', 'B. 海洋高新技术', 'C. 海洋捕捞业', 'D. 海洋旅游业'], answer: 'B' },
-            { id: 4, type: 'single', text: '习近平总书记提出的海洋经济 "五个更加注重" 不包括（  ）', options: ['A. 创新驱动', 'B. 高效协同', 'C. 产业规模', 'D. 人海和谐'], answer: 'C' },
-            { id: 5, type: 'single', text: '向海图强的核心是（  ）', options: ['A. 扩大捕捞', 'B. 海洋科技自立自强', 'C. 增加港口数量', 'D. 发展滨海旅游'], answer: 'B' },
-            { id: 6, type: 'single', text: '习近平总书记强调，发展决不能以牺牲人的生命为代价，这必须作为一条（  ）', options: ['A. 弹性要求', 'B. 不可逾越的红线', 'C. 参考标准', 'D. 阶段性规定'], answer: 'B' },
-            { id: 7, type: 'single', text: '各级党委和政府必须把安全生产摆到重要位置，树牢（  ）理念。', options: ['A. 效益优先', 'B. 安全发展', 'C. 速度第一', 'D. 成本可控'], answer: 'B' },
-            { id: 8, type: 'single', text: '落实安全生产责任制，要做到（  ）、"一岗双责"、齐抓共管、失职追责。', options: ['A. 党政同责', 'B. 企业主责', 'C. 政府主责', 'D. 部门专责'], answer: 'A' },
-            { id: 9, type: 'single', text: '习近平总书记强调，安全生产要做到警钟长鸣，用事故教训推动安全生产工作，做到"（  ）"。', options: ['A. 一地出事故、全国受教育', 'B. 一厂出事故、万厂受教育，一地有隐患、全国受警示', 'C. 一厂出事故、全国受教育', 'D. 一地有隐患、万厂受警示'], answer: 'B' },
-            { id: 10, type: 'single', text: '安全生产红线是指（  ）', options: ['A. 不能发生死亡事故', 'B. 不能以牺牲安全为代价发展', 'C. 必须零事故', 'D. 必须投入安全经费'], answer: 'B' },
-            { id: 11, type: 'single', text: '《海上交通安全法》最新修订施行时间是（  ）', options: ['A. 2016 年', 'B. 2018 年', 'C. 2020 年', 'D. 2021 年'], answer: 'D' },
-            { id: 12, type: 'single', text: '海上交通安全工作坚持（  ）、预防为主、便利通行、依法管理原则。', options: ['A. 安全第一', 'B. 效率优先', 'C. 服务优先', 'D. 管控优先'], answer: 'A' },
-            { id: 13, type: 'single', text: '在中华人民共和国（  ）内从事航行、停泊、作业等活动，适用《海上交通安全法》。', options: ['A. 领海', 'B. 管辖海域', 'C. 内水', 'D. 专属经济区'], answer: 'B' },
-            { id: 14, type: 'single', text: '海上交通事故发生后，当事船舶应立即向（  ）报告。', options: ['A. 就近海事管理机构', 'B. 港口企业', 'C. 船公司', 'D. 边防部门'], answer: 'A' },
-            { id: 15, type: 'single', text: '国家实行捕捞许可证制度，捕捞许可证由（  ）发放。', options: ['A. 生态环境部', 'B. 农业农村部（渔业主管部门）', 'C. 海事部门', 'D. 自然资源部门'], answer: 'B' },
-            { id: 16, type: 'single', text: '禁渔期、禁渔区由（  ）规定。', options: ['A. 县级政府', 'B. 省级政府', 'C. 国家渔业主管部门', 'D. 地方渔业部门'], answer: 'C' },
-            { id: 17, type: 'single', text: '船舶发生油类火灾，最适宜优先使用的灭火器材是（  ）', options: ['A. 清水', 'B. 泡沫灭火器', 'C. 干粉灭火器', 'D. 二氧化碳灭火器'], answer: 'B' },
-            { id: 18, type: 'single', text: '环境保护坚持保护优先、预防为主、综合治理、（  ）、损害担责的原则。', options: ['A. 政府负责', 'B. 公众参与', 'C. 企业负责', 'D. 部门联动'], answer: 'B' },
-            { id: 19, type: 'single', text: '根据《中华人民共和国环境保护法》，每年（  ）为环境日。', options: ['A. 3月12日', 'B. 4月22日', 'C. 6月5日', 'D. 7月11日'], answer: 'C' },
-            { id: 20, type: 'single', text: '国家在重点生态功能区、生态环境敏感区和脆弱区等区域划定（  ）。', options: ['A. 开发红线', 'B. 生态保护红线', 'C. 建设红线', 'D. 管理红线'], answer: 'B' },
-            { id: 21, type: 'single', text: '生态保护红线内（  ）', options: ['A. 禁止开发建设', 'B. 限制开发建设', 'C. 可以适度开发', 'D. 无特殊限制'], answer: 'A' },
-            { id: 22, type: 'single', text: '《国际海上避碰规则》适用范围是（  ）', options: ['A. 公海', 'B. 连接公海并可供海船航行的一切水域', 'C. 领海', 'D. 内水'], answer: 'B' },
-            { id: 23, type: 'single', text: '两机动船对遇时，应（  ）', options: ['A. 各自向右避让', 'B. 各自向左避让', 'C. 一船停船', 'D. 一船减速'], answer: 'A' },
-            { id: 24, type: 'single', text: '帆船与机动船相遇，机动船应（  ）', options: ['A. 让路', 'B. 保速保向', 'C. 鸣放信号', 'D. 加速通过'], answer: 'A' },
-            { id: 25, type: 'single', text: '船舶发生电器火灾，断电后优先选用哪种灭火器扑救最合适（  ）', options: ['A. 清水灭火器', 'B. 泡沫灭火器', 'C. 二氧化碳灭火器', 'D. 沙土'], answer: 'C' },
-            { id: 26, type: 'single', text: '船舶消防原则是（  ）', options: ['A. 先控制、后消灭', 'B. 先灭火、后控制', 'C. 先撤离、后报告', 'D. 先报告、后灭火'], answer: 'A' },
-            { id: 27, type: 'single', text: '船舶消防工作的基本方针是（  ）。', options: ['A. "安全第一、预防为主"', 'B. "预防为主、防消结合"', 'C. "以防为主、以消为辅"', 'D. "全员消防、重在预防"'], answer: 'B' },
-            { id: 28, type: 'single', text: '使用二氧化碳灭火器灭火时，应喷向火的_______部位。', options: ['A. 周围', 'B. 上部', 'C. 根部', 'D. 以上都对'], answer: 'C' },
-            { id: 29, type: 'single', text: '船舶固定式CO₂钢瓶的重量在减少_______以上时，应重新充装。', options: ['A. 5%', 'B. 10%', 'C. 15%', 'D. 20%'], answer: 'B' },
-            { id: 30, type: 'single', text: '油火不能用（  ）扑救。', options: ['A. 泡沫', 'B. 二氧化碳', 'C. 水', 'D. 干粉'], answer: 'C' },
-            { id: 31, type: 'single', text: '船舶进入渔船密集区，应（  ）', options: ['A. 保持自动舵', 'B. 改用手操舵', 'C. 加速通过', 'D. 减速至微速'], answer: 'B' },
-            { id: 32, type: 'single', text: '商渔船避让应坚持（  ）原则。', options: ['A. 早、大、宽、清', 'B. 早、大、宽、让', 'C. 早、宽、清、让', 'D. 大、宽、清、停'], answer: 'A' },
-            { id: 33, type: 'single', text: '根据防范商渔船碰撞要求，商船在开阔水域与渔船的最小会遇距离应不小于（  ）。', options: ['A. 0.5海里', 'B. 1海里', 'C. 1.5海里', 'D. 2海里'], answer: 'B' },
-            { id: 34, type: 'single', text: '根据防范商渔船碰撞要求，碰撞不可避免时应尽可能（  ），避免船首撞击渔船侧面。', options: ['A. 加速通过', 'B. 降低船速', 'C. 急转航向', 'D. 倒车'], answer: 'B' },
-            { id: 35, type: 'single', text: '商渔船碰撞高发时段是（  ）', options: ['A. 白天', 'B. 黄昏、夜间、凌晨', 'C. 大风天', 'D. 晴天'], answer: 'B' },
-            { id: 36, type: 'single', text: '商船发现渔船突然横穿，应（  ）', options: ['A. 加速通过', 'B. 立即减速、停车、倒车', 'C. 鸣放信号继续航行', 'D. 转向避让'], answer: 'B' },
-            { id: 37, type: 'single', text: '航行中避让渔船，下列做法错误的是（  ）', options: ['A. 提前减速，谨慎瞭望', 'B. 近距离快速从渔船船队中间穿越', 'C. 远离渔网作业区域', 'D. 主动鸣笛示意，保持安全横距'], answer: 'B' },
-            { id: 38, type: 'single', text: '被追越船应（  ）', options: ['A. 主动让路', 'B. 保速保向', 'C. 减速', 'D. 停车'], answer: 'B' },
-            { id: 39, type: 'single', text: '交通运输部海事局 "一指南六指引" 中的 "一指南" 是（  ）', options: ['A. 《航运企业落实安全生产主体责任指南》', 'B. 《船舶安全管理指南》', 'C. 《船员安全培训指南》', 'D. 《港口安全管理指南》'], answer: 'A' },
-            { id: 40, type: 'single', text: '"一指南六指引"制度体系的核心目标是（  ）。', options: ['A. 降低航运企业运营成本', 'B. 建立健全与水上交通实际相适应的安全生产管理制度', 'C. 统一全国航运安全管理标准', 'D. 提高船舶航行速度'], answer: 'B' },
-            { id: 41, type: 'single', text: '"一指南六指引" 适用对象是（  ）', options: ['A. 航运企业', 'B. 港口企业', 'C. 船员培训机构', 'D. 以上都是'], answer: 'A' },
-            { id: 42, type: 'single', text: '依据海事局 "一指南六指引" 文件，航运企业主体责任指南核心是（  ）', options: ['A. 强化风险管控', 'B. 加强船员培训', 'C. 完善管理制度', 'D. 规范应急处置'], answer: 'A' },
-            { id: 43, type: 'single', text: '"一指南六指引" 发布单位是（  ）', options: ['A. 交通运输部海事局', 'B. 交通运输部', 'C. 应急管理部', 'D. 农业农村部'], answer: 'A' },
-            { id: 44, type: 'single', text: '"一指南六指引" 重点遏制（  ）等典型事故。', options: ['A. 船舶火灾', 'B. 商渔船碰撞', 'C. 船舶搁浅', 'D. 以上都是'], answer: 'B' },
-            { id: 45, type: 'single', text: '"一指南六指引" 强调建立（  ）双重预防机制。', options: ['A. 风险分级管控与隐患排查治理', 'B. 安全检查与应急演练', 'C. 教育培训与责任落实', 'D. 设备维护与人员管理'], answer: 'A' },
-            { id: 46, type: 'single', text: '航运企业安全生产主体责任指南要求强化（  ）', options: ['A. 岸基值班值守', 'B. 船舶自主管理', 'C. 船员自我约束', 'D. 港口协同管理'], answer: 'A' },
-            { id: 47, type: 'single', text: '全国 "安全生产月" 活动固定在每年（  ）', options: ['A. 5 月', 'B. 6 月', 'C. 7 月', 'D. 8 月'], answer: 'B' },
-            { id: 48, type: 'single', text: '我国第一个安全生产月始于哪一年？', options: ['A. 2002年', 'B. 2003年', 'C. 2004年', 'D. 2005年'], answer: 'A' },
-            { id: 49, type: 'single', text: '汕尾陆丰后湖海上风电场区域，国内标志性风渔融合大型智能养殖平台是（  ）', options: ['A. 华润深蓝 1 号', 'B. 汕尾伏羲 1 号', 'C. 汕尾品清 1 号', 'D. 汕尾澎湖 1 号'], answer: 'B' },
-            { id: 50, type: 'single', text: '下列哪个海湾属于汕尾市管辖？（  ）', options: ['A. 大亚湾', 'B. 红海湾', 'C. 海陵湾', 'D. 水东湾'], answer: 'B' },
-            { id: 51, type: 'single', text: '下列属于汕尾特色主要水产品的是（  ）', options: ['A. 大黄鱼', 'B. 马鲛鱼', 'C. 大闸蟹', 'D. 小龙虾'], answer: 'B' },
-            { id: 52, type: 'single', text: '海上遇险报警电话是多少？', options: ['A. 12395', 'B. 119', 'C. 95110', 'D. 12345'], answer: 'A' },
-            { id: 53, type: 'single', text: '根据海上救生理论，人员在海上漂泊时，首要的生存原则是（  ）。', options: ['A. 保持体力等待救援', 'B. 保存体温防止失温', 'C. 收集淡水和食物', 'D. 发出求救信号'], answer: 'B' },
-            { id: 54, type: 'single', text: '根据修订后的《海上交通安全法》，以下哪项不属于该法规定的船舶管理制度？', options: ['A. 船舶检验制度', 'B. 国籍登记制度', 'C. 船舶吨税制度', 'D. 船舶安全和防污染管理制度'], answer: 'C' },
-            { id: 55, type: 'single', text: '渔民在收到海事、海洋综合执法等部门发布的预警信息后，应该怎么做？', options: ['A. 不予理会，继续作业', 'B. 立即停止作业，尽快回港或前往安全水域避风', 'C. 观望其他渔船动向', 'D. 只在风很大时考虑避风'], answer: 'B' },
-            { id: 56, type: 'single', text: '我国南海海域伏季休渔期的统一休渔时间为（  ）', options: ['A. 每年5月1日12时至8月16日12时', 'B. 每年4月1日12时至7月16日12时', 'C. 每年6月1日12时至9月16日12时', 'D. 每年5月1日12时至9月1日12时'], answer: 'A' },
-            { id: 57, type: 'single', text: '船舶在海上航行、停泊、作业期间，应当持续值守国际通用海上遇险与安全通信VHF值守频道为（  ）', options: ['A. VHF06频道', 'B. VHF16频道', 'C. VHF70频道', 'D. VHF88频道'], answer: 'B' },
-            { id: 58, type: 'single', text: '2026 年 "安全生产月" 主题是（  ）', options: ['A. 人人讲安全、个个会应急 ------ 畅通生命通道', 'B. 人人讲安全、个个会应急 ------ 查找身边安全隐患', 'C. 人人讲安全、个个会应急 ------ 排查整治风险隐患', 'D. 人人讲安全、个个会应急 ------ 筑牢安全防护防线'], answer: 'C' },
-            // 多选 1~31
-            { id: 59, type: 'multi', text: '中央财经委员会第六次会议提出海洋经济高质量发展 "五个更加注重"，下列属于核心要求的有（  ）', options: ['A. 更加注重创新驱动', 'B. 更加注重人海和谐', 'C. 更加注重规模提升', 'D. 更加注重合作共赢'], answer: 'ABD' },
-            { id: 60, type: 'multi', text: '总书记强调安全生产不可逾越的红线与责任体系要求，正确的是（  ）', options: ['A. 发展决不能以牺牲人的生命为代价', 'B. 隐患可结合现场实际情况延后开展全面排查', 'C. 落实党政同责、"一岗双责"、齐抓共管', 'D. 坚持人民至上、生命至上'], answer: 'ACD' },
-            { id: 61, type: 'multi', text: '海上交通安全工作法定基本原则包含（  ）', options: ['A. 安全第一、预防为主', 'B. 便利通行、依法管理', 'C. 兼顾航行效率，可适度优先考量短期经济效益', 'D. 保障海上交通有序畅通'], answer: 'ABD' },
-            { id: 62, type: 'multi', text: '我国法律明确禁止的渔业捕捞行为有（  ）', options: ['A. 根据个人作业经验灵活选用合规网具开展捕捞养殖', 'B. 禁渔区、禁渔期违规捕捞', 'C. 炸鱼、毒鱼、电鱼破坏性捕捞', 'D. 使用小于法定最小网目尺寸渔具捕捞'], answer: 'BCD' },
-            { id: 63, type: 'multi', text: '海洋开发活动需遵守的生态环保义务有（  ）', options: ['A. 海洋油气平台残油、废油统一回收，禁止直排', 'B. 未经许可不得向管辖海域倾倒废弃物', 'C. 近海养殖可结合海域自净能力适度放宽尾水排放标准', 'D. 落实陆海统筹，管控陆源入海污染物'], answer: 'ABD' },
-            { id: 64, type: 'multi', text: '船舶保持正规瞭望的合法观测手段包含（  ）', options: ['A. 视觉瞭望、听觉守听', 'B. AIS', 'C. 雷达', 'D. VHF16 频道持续值守沟通'], answer: 'ABCD' },
-            { id: 65, type: 'multi', text: '交叉相遇局面下让路船合规避让措施有（  ）', options: ['A. 及早大幅度转向，明确避让意图', 'B. 采用安全航速，预留避让余量', 'C. 提前预判碰撞风险，主动宽裕让清', 'D. 近距离小角度微调航向'], answer: 'ABC' },
-            { id: 66, type: 'multi', text: '根据避碰规则，船舶在下列哪些情况下应使用安全航速？（  ）', options: ['A. 能见度良好时', 'B. 能见度不良时', 'C. 船舶密集水域', 'D. 狭水道'], answer: 'ABCD' },
-            { id: 67, type: 'multi', text: '海上人员落水基础救生处置要求包括（  ）', options: ['A. 立即报告海事、投放救生圈、启动搜救', 'B. 稳定落水者体征，规范心肺复苏操作', 'C. 现场紧急情况下，船员可直接跳海靠近施救落水人员', 'D. 协调周边就近船舶协同救助'], answer: 'ABD' },
-            { id: 68, type: 'multi', text: '商船驶入渔船密集区前置防范措施有（  ）', options: ['A. 途经小型渔区可临时关闭 AIS 提升航行效率', 'B. 全面检测雷达、AIS、VHF 通信设备', 'C. 航前核查渔场分布，优化航行计划', 'D. 驾驶台双人值班，保持连续正规瞭望'], answer: 'BCD' },
-            { id: 69, type: 'multi', text: '商渔共治专项行动重点管控高风险时段包含（  ）', options: ['A. 凌晨 0---4 时事故高发"黑色四小时"', 'B. 日落黄昏视线受限时段', 'C. 开渔期、休渔转换关键节点'], answer: 'ABC' },
-            { id: 70, type: 'multi', text: '关于"一指南六指引"制度体系在航运企业中的落实要求，以下说法正确的有（  ）。', options: ['A. 企业需将"一指南六指引"转化为内部管理制度', 'B. 企业需将"一指南六指引"转化为船岸实操流程', 'C. "一指南六指引"仅作为参考文件，企业需结合实际情况执行', 'D. "一指南六指引"仅适用于国有航运企业'], answer: 'AB' },
-            { id: 71, type: 'multi', text: '"一指南六指引" 体系建设目标包含（  ）', options: ['A. 实现安全管理从被动处置转向源头主动预防', 'B. 覆盖航运企业全流程、全岗位安全管控', 'C. 简化岸基值班值守，降低企业经营成本', 'D. 提升船舶本质安全与船员履职能力'], answer: 'ABD' },
-            { id: 72, type: 'multi', text: '安全生产月固定标准化活动内容有（  ）', options: ['A. 6 月 16 日安全宣传咨询日集中宣教', 'B. 安全宣传五进（企业、农村、社区、学校、家庭）', 'C. 开展隐患排查、应急演练等实战活动', 'D. 事故警示教育、全民安全公开课学习'], answer: 'ABCD' },
-            { id: 73, type: 'multi', text: '对 "五个更加注重" 辩证逻辑关系表述正确的有（  ）', options: ['A. 创新驱动是核心动力，支撑产业迭代升级', 'B. 人海和谐是发展底线，划定生态开发红线', 'C. 高效协同要求陆海统筹、区域一体化协同发展', 'D. 合作共赢拓展蓝色经济国际合作空间'], answer: 'ABCD' },
-            { id: 74, type: 'multi', text: '建设海洋强国背景下海洋渔业转型升级方向包含（  ）', options: ['A. 深远海智能养殖、智慧渔业数字化改造', 'B. 海洋碳汇、蓝色生态经济新业态培育', 'C. 渔业装备国产化、高端海洋装备自主研发', 'D. 依托近海资源适度扩大传统捕捞作业规模'], answer: 'ABC' },
-            { id: 75, type: 'multi', text: '下列属于船员基本安全培训内容的有（  ）', options: ['A. 海上求生', 'B. 防火与灭火基础', 'C. 基本急救', 'D. 个人安全与社会责任'], answer: 'ABCD' },
-            { id: 76, type: 'multi', text: '船舶发生搁浅险情，正确处置措施有（  ）', options: ['A. 立即停车、严禁盲目倒车或冲滩', 'B. 迅速测量四周水深，判断搁浅部位', 'C. 第一时间上报就近海事管理机构', 'D. 立即抛多只船锚强行脱浅'], answer: 'ABC' },
-            { id: 77, type: 'multi', text: '海上作业需提前向海事报备审批的活动有（  ）', options: ['A. 航道疏浚、沉船打捞作业', 'B. 划定临时禁航区', 'C. 水上施工', 'D. 大型海上娱乐活动、水上赛事'], answer: 'ABCD' },
-            { id: 78, type: 'multi', text: '船舶消防中，灭火的基本方法包括（  ）。', options: ['A. 冷却法', 'B. 窒息法', 'C. 隔离法', 'D. 抑制法'], answer: 'ABCD' },
-            { id: 79, type: 'multi', text: '中华人民共和国海事局防范商渔船碰撞通告中要求的措施包括（  ）。', options: ['A. 召开航行安全会议', 'B. 确保驾驶台所有航行值班人员知晓渔船作业特点', 'C. 评估碰撞风险、优化避让方案', 'D. 减少驾驶台值班人员以降低疲劳'], answer: 'ABC' },
-            { id: 80, type: 'multi', text: '"一指南六指引"制度体系通过以下哪些方式让企业"照单防风险"？（  ）', options: ['A. 规范岸基值班', 'B. 航次风险评估', 'C. 高风险作业"双把关"程序', 'D. 提高船舶航行速度'], answer: 'ABC' },
-            { id: 81, type: 'multi', text: '船舶机舱油类火灾正确处置措施有（  ）。', options: ['A. 切断燃油供给', 'B. 使用泡沫系统灭火', 'C. 用水直接喷射油火', 'D. 隔离燃烧区域'], answer: 'ABD' },
-            { id: 82, type: 'multi', text: '航运企业安全生产双重预防机制是（  ）。', options: ['A. 风险分级管控', 'B. 隐患排查治理', 'C. 员工考勤管理', 'D. 船舶油耗管控'], answer: 'AB' },
-            { id: 83, type: 'multi', text: '不能确保在安全通过的情况下，应果断采取哪些措施？（  ）', options: ['A. 备车', 'B. 减速', 'C. 加速', 'D. 转向'], answer: 'AB' },
-            { id: 84, type: 'multi', text: '根据《中华人民共和国环境保护法》，政府应承担的环保责任包括（  ）。', options: ['A. 对本行政区域的环境质量负责', 'B. 改善环境质量', 'C. 加大财政投入', 'D. 加强环境保护宣传和普及工作'], answer: 'ABCD' },
-            { id: 85, type: 'multi', text: '船舶海洋污染防治硬性规定有（  ）。', options: ['A. 生活污水、洗舱水达标后方可排放', 'B. 废旧船舶燃油、危废岸上合规处置', 'C. 船舶生活垃圾直接倾倒近海海域', 'D. 油类作业全程布设防污染围控设施'], answer: 'ABD' },
-            { id: 86, type: 'multi', text: '直航船在何种情况下需主动采取避让行动（  ）。', options: ['A. 让路船明显拒不履行避让义务', 'B. 碰撞危险迫在眉睫，紧迫局面形成', 'C. 无论态势如何，直航船永远无需转向', 'D. 环境受限无法等待让路船行动'], answer: 'ABD' },
-            { id: 87, type: 'multi', text: '弃船逃生合规操作要求有（  ）。', options: ['A. 慌乱跳海、单独游离搜救区域', 'B. 优先疏散老弱、乘客，船员最后撤离', 'C. 全员穿戴救生衣，有序登乘救生艇筏', 'D. 留存船舶关键航行数据，上报海事'], answer: 'BCD' },
-            { id: 88, type: 'multi', text: '渔船防范碰撞主体责任落实内容有（  ）。', options: ['A. 全程开启北斗、AIS 导航通信设备', 'B. VHF16 频道常态化守听商船动态', 'C. 航道主航路内禁止抛锚、拖网作业', 'D. 开渔前开展避碰安全专项培训'], answer: 'ABCD' },
-            { id: 89, type: 'multi', text: '根据《防范商渔船碰撞工作指引》，船舶途经渔船作业水域，应当严格保持安全通过距离，下列关于安全避让距离说法正确的有（  ）', options: ['A. 在开阔水域，应保持1海里以上安全距离通过', 'B. 在开阔水域，应保持2海里以上安全距离通过', 'C. 在渔船密集作业区，应保持0.5海里以上安全距离通过', 'D. 在渔船密集作业区，应保持1海里以上安全距离通过'], answer: 'AC' }
+(function() {
+    // ================================================================
+    // 完整题库：判断题109道 + 单选题283道 + 多选题135道 = 527道
+    // ================================================================
+    const raw = [];
+
+    function addJudge(id, text, ans) { raw.push({ id, type:'judge', text, answer: ans==='√'?'√':'×', options:['√','×'] }); }
+    function addSingle(id, text, opts, ans) { raw.push({ id, type:'single', text, options:opts, answer:ans }); }
+    function addMulti(id, text, opts, ans) { raw.push({ id, type:'multi', text, options:opts, answer:ans.split('') }); }
+
+    // ----- 一、判断题 1-109 -----
+    const judgeData = [
+        [1,'水利水电施工企业从业人员的职业健康检查费用由从业人员自己承担。','×'],
+        [2,'水利水电施工企业在变更完工后，应进行验收。','×'],
+        [3,'根据《安全生产许可证条例》的规定，企业在生产过程中，不再从事安全生产许可证的项目时，可以将安全生产许可证转让给其他企业。','×'],
+        [4,'由于技术的进步、投入资金的增加，目前本质安全已成为我们可以达到的目标。','×'],
+        [5,'依据《水利水电工程施工作业人员安全操作规程》，起重机在坡道停车，车头向上坡时应挂一档，车头向下坡时应挂倒档。','√'],
+        [6,'焊接与气割作业不属于特种作业，不需要持证上岗。','×'],
+        [7,'各类特种作业人员要具有初中及以上文化程度。','√'],
+        [8,'某单位发生造成12人死亡的重大事故，事故发生单位对其负有责任，依据《生产安全事故罚款处罚规定（试行）》规定，应处50万元以上100万元以下的罚款。','√'],
+        [9,'在中华人民共和国境内从事建设工程的新建、扩建、改建和拆除等有关活动及实施对建设工程安全生产的监督管理，必须遵守《建设工程安全生产管理条例》。','√'],
+        [10,'事故隐患排查治理和防控的责任主体是生产经营单位。','√'],
+        [11,'安全生产行政法规的法律地位低于有关安全生产的法律。','√'],
+        [12,'企业用于完善、改造和维护安全防护设备、设施的支出属于安全费用的支出范围。','√'],
+        [13,'隐患就是高危险性的工业设施。','×'],
+        [14,'警车、消防车、救护车、工程抢险车执行非紧急任务时，可以使用警报器、标志灯具。','×'],
+        [15,'在手拉葫芦起吊重物时，已吊装重物需停留时间稍长时，应将手拉链拴在起重链上。','√'],
+        [16,'根据《水利水电工程施工通用安全技术规程》，易燃物品堆存时，堆垛不应过高、过密，堆垛之间，以及堆垛与堤墙之间，应留有一定间距，通道和通风口，主要通道的宽度不应小于2.0m，每个仓库应规定贮存限额。','√'],
+        [17,'根据《中共中央国务院关于推进安全生产领域改革发展的意见》，管生产安全的也应该管职业健康。','√'],
+        [18,'依据《生产经营单位安全培训规定》，生产经营单位应当进行安全培训的从业人员包括主要负责人、安全管理人员、特种作业人员、其他从业人员。','√'],
+        [19,'现场处置方案是根据不同事故类别，针对具体的场所、装置或设施所制定的应急处置措施。','√'],
+        [20,'工伤保险制度的建立，可以促进企业和社会关注企业安全管理，积极采取事故预防措施，防止事故和职业病的发生。','√'],
+        [21,'根据《建设工程安全生产管理条例》，施工单位应当在危险部位设置明显的安全警示标志。安全警示标志必须符合行业标准。','√'],
+        [22,'依据《中华人民共和国特种设备安全法》，特种设备使用单位应当将定期检验标志置于该特种设备的显著位置。','√'],
+        [23,'三级安全教育一般是指企业、部门、班组的安全教育。','√'],
+        [24,'依据《水利水电工程金属结构与机电设备安装安全技术规程》，脚手架在使用期间，严禁拆除主节点处的纵、横向水平杆，纵、横向扫地杆，连墙件。','√'],
+        [25,'水泵工每三小时进行一次巡回检查，发现问题及时报告。','√'],
+        [26,'高处作业是指凡在坠落高度基准面3m以上（含3m）有可能坠落的高度进行作业。','√'],
+        [27,'水利水电工程建设项目拦标价计算中应单列安全生产费用，不得作为竞争性报价。','√'],
+        [28,'发生重大事故，对负有责任的生产经营单位除要求其依法承担相应的赔偿等责任外，由应急管理部门处以二百万元以上一千万元以下的罚款。','√'],
+        [29,'从业人员在作业过程中，应当严格落实生产安全责任，遵守本单位的安全生产规章制度和操作规程，服从管理，正确佩戴和使用劳动防护用品。','√'],
+        [30,'因生产安全事故受到损害的从业人员，除依法享有工伤保险外，依照有关民事法律尚有获得赔偿的权利的，有权向本单位提出赔偿要求。','√'],
+        [31,'在紧急防汛期间，因抢险需要取土占地、砍伐林木、清除阻水障碍物的，任何单位和个人不得阻拦。','√'],
+        [32,'《中华人民共和国特种设备安全法》规定，电梯安装单位对电梯安全性能负责。','√'],
+        [33,'对于重大事故隐患，水利水电施工企业应当及时向安全监管监察部门和有关部门报告。','√'],
+        [34,'根据《水利工程建设安全生产管理规定》，项目法人应当组织编制保证安全生产的措施方案并自工程开工之日起30个工作日内报有管辖权的水行政主管部门、流域管理机构或者其委托的水利工程建设安全生产监督机构备案。','×'],
+        [35,'单位和个人可以根据相关技术标准拼装机动车辆。','×'],
+        [36,'水利建设工程的主体结构可以进行工程分包。','×'],
+        [37,'从业人员发现一般事故隐患或者潜在危险因素的，应当立即撤离现场。','×'],
+        [38,'在生产过程中，造成人员死亡、伤害、职业病、财产损失或其他损失的意外事件，称为事故。','√'],
+        [39,'工会发现危及从业人员生命安全的情况时，有权立即组织从业人员撤离危险场所。','×'],
+        [40,'依据《水利安全生产标准化评审管理暂行办法》，水利生产经营单位在自主开展安全生产标准化等级评定时，不得聘请专业技术咨询机构提供支持。','×'],
+        [41,'依据《水利水电工程施工通用安全技术规程》，起重工应熟悉、正确运用并及时发出各种规定的手势、旗语等。多人工作时，应指定一人负责指挥。','√'],
+        [42,'依据《生产经营单位安全培训规定》，预防事故和职业危害的措施及应注意的安全事项和从业人员安全生产权利和义务属于厂（矿）级岗前安全培训内容。','×'],
+        [43,'依据《水利水电工和施工作业人员安全操作规程》，起重机在坡道停车，车头向上坡时应挂一档，车头向下坡时应挂倒档，并用三角木把车轮塞死。','√'],
+        [44,'碾压混凝土铺筑时，仓号内应派专人指挥、协调各类施工设备。','√'],
+        [45,'根据《建设工程安全生产管理条例》，分包单位应当向作业人员提供安全防护用具和安全防护服装，并书面告知危险岗位的操作规程和违章操作的危害。','×'],
+        [46,'根据《水利水电工程施工通用安全技术规程》，运输化学危险物品的车辆（火车除外）通过市区时，应当遵守所在地公安机关规定的行车时间和路线，中途可以随意停车。','×'],
+        [47,'根据《水利水电工程施工通用安全技术规程》，电弧焊电源熔断器应单独设置，严禁两台或以上的电焊机共用一组熔断器，熔断丝应根据焊机工作的最大电流来选定，特殊情况下可以用铜线代替。','×'],
+        [48,'检查伤员的伤口的时候，检查人员见到病人受伤时，应缓慢脱去其衣服，对伤口进行检查。','×'],
+        [49,'根据《水利水电工程施工通用安全技术规程》，施工现场及作业地点，应有足够的照明，主要通道应装设路灯。','√'],
+        [50,'严格执行交接班制度，不准擅自离开工作岗位。未经许可，不得将自己的工作交给别人，更不得随意操作别人的机械设备。','√'],
+        [51,'起吊钢筋时，规格必须统一，不准长短参差不一，不准一点起吊。','√'],
+        [52,'高边坡是指开挖边坡高度不小于50m的石方边坡，不小于30m的土方边坡。','√'],
+        [53,'施工项目部应由项目主要负责人每半年组织开展一次职业健康监督检查活动，并做好记录。','×'],
+        [54,'生产经营单位主要负责人拒不执行负有安全生产监督管理职责的部门作出的停产停业整顿决定，三年内不得担任任何生产经营单位的主要负责人。','×'],
+        [55,'依据《水利水电工程施工通用安全技术规程》，三级、特级及悬空高处作业使用的脚手架拆除时，应事先制定出安全可靠的措施才能进行拆除。','√'],
+        [56,'根据《中华人民共和国职业病防治法》，劳动者被诊断患有职业病，但用人单位没有依法参加工伤保险，其医疗和生活保障应由本人承担。','×'],
+        [57,'事故调查组向有关单位和个人了解与事故有关的情况，并要求其提供相关文件、资料时，有关单位和个人可以拒绝提供。','×'],
+        [58,'生产安全事故发生后，事故现场有关人员应当立即向本单位负责人报告。','√'],
+        [59,'在极偏僻的地区，对于架空导线与地面之间的最小距离没有太高要求，只要安全即可。','×'],
+        [60,'动力配电线路和照明配电线路可设置为同一条线路。','×'],
+        [61,'从事特种作业的人员应取得特种作业操作资格证书，方可上岗作业。','√'],
+        [62,'依据《生产经营单位安全培训规定》，工作环境及危险因素属于班级岗前安全培训内容。','×'],
+        [63,'依据《水利水电工程施工通用安全技术规程》，施工走道上方和下方有施工设施或作业人员通行时应设置大于通道宽度的隔离防护棚。','√'],
+        [64,'依据《安全生产事故隐患排查治理暂行规定》，生产经营单位应当每季对本单位事故隐患排查治理情况进行统计分析并于下一季度1日前向安全监督监察部门和有关部门报送书面统计分析表。','×'],
+        [65,'根据《水利水电工程施工通用安全技术规程》，在潮湿和易触及带电体场所的照明电源电压不应大于24V。','√'],
+        [66,'根据《水利水电工程施工通用安全技术规程》，起重吊运时，对表面涂油的重物，应将捆绑处油污清理干净，以防起吊过程中钢丝绳滑动。','√'],
+        [67,'根据《建设工程安全生产管理条例》，建设单位应在规定期限内，将保证安全施工的措施报送建设工程所在地的县级以上地方人民政府建设行政主管部门或者其他有关部门备案。','√'],
+        [68,'高边坡、基坑边坡应根据具体情况设置高度不低于1.0m的安全防护栏或挡墙，防护栏和挡墙应牢固。','√'],
+        [69,'施工项目部应根据本工程作业、岗位、工种特点和设备安全技术要求，组织编制安全操作规程，发放到相关作业人员，并报建设单位备案。','√'],
+        [70,'生产经营单位的主要负责人未履行安全生产法规定的安全生产管理职责，导致发生特别重大事故的，处上一年年收入百分之八十的罚款。','√'],
+        [71,'生产经营单位未采取措施消除事故隐患构成犯罪的，依照法律有关规定追究刑事责任。','√'],
+        [72,'土石方开挖的深度愈深，留置时间越长，边坡应设计的陡一些，反之则可平缓一些。','√'],
+        [73,'根据《水利工程建设安全生产管理规定》，发生生产安全事故，项目法人及其他有关单位应当及时、如实地向负责安全生产监督管理的部门以及水行政主管部门或者流域管理机构报告。','√'],
+        [74,'安全，泛指没有危险，不出事故的状态。即指标系统中不存在任何危险源的状态才能称为是安全的。','√'],
+        [75,'水利水电施工企业应在危险性较大的作业现场设置明显的安全警示标志和警示牌。','√'],
+        [76,'2016年12月18日，《中共中央国务院关于推进安全生产领域改革发展的意见》正式发布，这是首部以中共中央、国务院名义印发的安全生产文件。','√'],
+        [77,'生产经营单位安排从业人员进行安全培训期间，如考核不合格，生产经营单位可以不支付工资和必要的费用。','×'],
+        [78,'根据《中华人民共和国职业病防治法》，劳动者被诊断患有职业病，但用人单位没有依法参加工伤保险，其医疗和生活保障应由本人承担。','×'],
+        [79,'任何用人单位不得使用国家明令禁止使用的可能产生职业病危害的设备或者材料。','√'],
+        [80,'在生产经营单位的安全生产工作中，最基本的安全管理制度是安全生产责任制。','√'],
+        [81,'依据《水利水电工程施工通用安全技术规程》，起重作业中大件起吊运输和吊运危险的物品时，应制定专项安全技术措施，按规定要求审批后，方能施工。','√'],
+        [82,'生产安全事故控制目标主要包括人员轻伤、重伤、死亡控制数量，由安全事故造成的直接经济损失控制金额。','√'],
+        [83,'施工企业及项目部均应每年至少一次对施工项目安全生产费用使用情况进行检查、自检，并对存在的问题进行整改。','×'],
+        [84,'生产经营单位违反安全生产法规定，被责令改正且拒不改正的，负有安全生产监督管理职责的部门自作出责令改正之日起，按照原处罚数额按日连续处罚。','×'],
+        [85,'根据《安全生产许可证条例》的规定，在安全生产许可证颁发、管理和监督检查工作中，可以适当收取费用。','×'],
+        [86,'用人单位可以根据实际情况安排未成年工从事接触职业病危害的作业。','×'],
+        [87,'配电箱、开关箱中导线的进线口和出线口应设在箱体的箱门处。','×'],
+        [88,'《中共中央国务院关于推进安全生产领域改革发展的意见》中提出了五项基本原则，其中坚持安全发展是指贯彻以人民为中心的发展思想，始终把人的生命放在首位，正确处理安全与发展的关系，大力实施安全发展战略，为经济社会发展提供强有力的安全保障。','√'],
+        [89,'《中共中央国务院关于推进安全生产领域改革发展的意见》中提出了五项基本原则，其中坚持改革创新是指不断推进安全生产理论创新、制度创新、体制机制创新、科技创新和文化创新，增强企业内生动力，激发全社会创新活力，破解安全生产难题，推动安全生产与经济社会协调发展。','√'],
+        [90,'依据《生产经营单位安全培训规定》，预防事故和职业危害的措施及应注意的安全事项和从业人员安全生产权利和义务属于厂（矿）级岗前安全培训内容。','×'],
+        [91,'有关单位或个人违反《中华人民共和国特种设备安全法》规定，应当承担民事赔偿责任和缴纳罚款、罚金，其财产不足以同时支付时，应先缴纳罚款、罚金。','×'],
+        [92,'根据《水利水电工程施工通用安全技术规程》，夜间无照明、浓雾天、雷雨天不应进行露天爆破作业。','√'],
+        [93,'施工项目部应根据已审批的安全技术措施对管理层、作业层进行技术交底并组织实施。','√'],
+        [94,'轮胎式起重机司机不用持有特种作业操作证，取得公安机关颁发的机动车驾驶证方可上路行驶。','×'],
+        [95,'施工项目部应根据本工程作业、岗位、工种特点和设备安全技术要求，组织编制安全操作规程，发放到相关作业人员，并报建设单位备案。','×'],
+        [96,'安全风险评估中，风险值的大小由危险源失控引发事故的损失来衡量。','×'],
+        [97,'根据《个体防护装备配备规范第1部分：总则》（GB39800.1-2020），从事有可能被传动机械绞辗、夹卷伤害的作业人员应该穿戴紧口式防护服，长发应佩戴防护帽，应戴防护手套。','×'],
+        [98,'设备检修应贯彻"预防为主"的方针，坚持"应修必修，修必修好，质量第一"的原则。','√'],
+        [99,'隐患信息报告主要包括隐患基本信息、整改方案信息、整改进展信息、整改完成情况信息等四类信息。','√'],
+        [100,'作业场所防护设施有：作业场所的防辐射、防静电、防噪音、通风（除尘、排毒）、基坑支护、脚手架、临边空、洞防护栏（网）、防滑、防灼烫等设施、用于泄压的阀门、爆破片、放空管等设施。','√'],
+        [101,'进行支模、粉刷、砌墙等作业时，下方若有其他作业人员，必须处于可能坠落的范围半径之外。','√'],
+        [102,'施工场内汽车运输道路宽度不得小于车辆宽度的1.2倍，双车道路宽度不宜窄于7m。','√'],
+        [103,'生产经营单位发生生产安全事故，造成其从业人员死亡的，死亡者家属除依法获得医疗保险补偿外，事故发生单位还应当按照有关规定向其一次性支付生产安全事故死亡赔偿金。','√'],
+        [104,'隐患信息报告主要包括隐患基本信息、整改方案信息、整改进展信息、整改完成情况信息等四类信息。','√'],
+        [105,'根据《水工建筑物地下开挖工程施工规范》（SL 378-2007），在开挖断面、通风条件、运输距离允许时，可采用装载机或挖掘机配自卸汽车出渣运输方式。汽车在洞内行驶时，时速不宜大于20km/h。','√'],
+        [106,'制定《中华人民共和国安全生产法》（2021年版）最重要的目的是为了制裁各种安全生产违法犯罪行为。','×'],
+        [107,'根据《水利水电工程施工通用安全技术规程》（SL398-2007），桶装油品的贮存保管，应执行夏秋、冬春季统一灌装标准，并做到标记清晰、桶盖拧紧、无渗漏。','×'],
+        [108,'根据《水利水电工程机电设备安装安全技术规程》（SL400-2016），竖井敷设电缆应采用从下往上敷设，敷设方案应计算整个敷设过程中电缆、电缆盘、电缆支架、机具、刹车的受力，防止过载失控，引发安全事故。','×'],
+        [109,'根据《水利水电工程施工安全防护设施技术规范》（SL714-2015），高处作业安装大型模板时，模板的临空面下方应悬挂水平宽度不小于2.00m的安全网，配有足够安全带、安全绳。','√']
+    ];
+    judgeData.forEach(d => addJudge(d[0], d[1], d[2]));
+
+    // ----- 二、单选题 1-283 (完整录入) -----
+    const singleData = [
+        [1,'生产经营单位的主要负责人未履行安全生产管理职责的，责令限期改正；逾期未改正的，处（  ）罚款，责令生产经营单位停产停业整顿。',['A. 二万元以上五万元以下','B. 二万元以上十万元以下','C. 五万元以上十万元以下','D. 一万元以上二万元以下'],'C'],
+        [2,'生产经营单位应当具备的安全生产条件所必需的资金投入，由生产经营单位的（  ）予以保证，并对由于安全生产所必需的资金投入不足导致的后果承担责任。',['A.项目负责人','B.工会','C.决策机构、主要负责人或者个人经营的投资人','D.职工代表'],'C'],
+        [3,'生产经营单位（  ）将生产经营、场所、设备发包或者出租给不具备安全生产条件或者相应资质的单位或者个人。',['A.不应','B.可以','C.不得','D.不宜'],'C'],
+        [4,'生产安全事故发生单位及其有关人员谎报或者瞒报事故的，对事故发生单位处（  ）的罚款。',['A.10万元以上20万元以下','B.50万元以上100万元以下','C.100万元以上500万元以下','D.20万元以上50万元以下'],'C'],
+        [5,'实行工程总承包的，由（  ）统一负责组织编制建设工程生产安全事故应急救援预案。',['A.总承包单位','B.分包单位','C.监理单位','D.项目法人'],'A'],
+        [6,'生产安全事故发生单位主要负责人在事故发生后不立即组织事故抢救的，处上一年年收入（  ）的罚款。',['A.40%','B.80%','C.60%','D.100%'],'D'],
+        [7,'生产安全事故发生单位主要负责人迟报事故的，处上一年年收入（  ）的罚款。',['A.40%~60%','B.60%~80%','C.80%~100%','D.30%~40%'],'B'],
+        [8,'生产安全事故发生单位造成15人以上30人以下死亡，或者70人以上100人以下重伤，或者7000万元以上1亿元以下直接经济损失的重大事故负有责任的，处（  ）的罚款。',['A.100万元以上300万元以下','B.500万元以上1000万元以下','C.1000万元以上1500万元以下','D.300万元以上500万元以下'],'D'],
+        [9,'施工企业的"三类人员"安全生产考核取证的培训时间是（  ）。',['A.12学时','B.24学时','C.40学时','D.32学时'],'D'],
+        [10,'施工企业的"三级安全教育"的培训时间是（  ）。',['A.24学时','B.32学时','C.12学时','D.50学时'],'D'],
+        [11,'施工企业的项目负责人安全继续教育的培训时间是（  ）。',['A.12学时','B.30学时','C.16学时','D.24学时'],'C'],
+        [12,'施工企业的主要负责人安全继续教育的培训时间是（  ）。',['A.24学时','B.16学时','C.30学时','D.12学时'],'D'],
+        [13,'施工单位的职工食堂应加强进货管理，建立（  ）台账，并保持原始记录。',['A.就餐人员','B.食品、原料','C.卫生保洁','D.剩饭剩菜'],'B'],
+        [14,'施工单位应当为从事登高架设作业、起重吊装作业的施工人员配备防止（  ）的劳动防护用品。',['A.强光','B.淹溺','C.滑落','D.触电'],'C'],
+        [15,'施工现场设置在地面上的临时疏散通道，其净宽度不应小于（  ）。',['A.2.5m','B.3m','C.2m','D.1.5m'],'D'],
+        [16,'职业病防治工作的方针是（  ）。',['A.预防为主、防治结合','B.预防为主、防消结合','C.谁主管谁负责','D.安全第一、预防为主'],'A'],
+        [17,'消防工作的方针是（  ）。',['A.安全第一、预防为主','B.谁主管谁负责','C.预防为主、防消结合','D.预防为主、防治结合'],'C'],
+        [18,'两台起重机抬吊一重物时，每台起重机所分配的荷载不应超过其额定荷载的（  ）。',['A.60%','B.70%','C.80%','D.50%'],'C'],
+        [19,'电焊作业现场周围（  ）范围内不得堆放易燃易爆物品。',['A.10m','B.8m','C.3m','D.5m'],'A'],
+        [20,'土方开挖时，挖出的泥土应堆放在坑边（  ）以外，堆放高度不得超过（  ）。',['A.1m,1.5m','B.1m,1m','C.1.5m,1.5m','D.1.5m,2m'],'A'],
+        [21,'操作混凝土振捣器的人员必须（  ）。',['A.戴安全帽','B.穿硬底鞋','C.穿绝缘鞋、戴绝缘手套','D.穿工作服'],'C'],
+        [22,'易燃易爆液体或气体储存的仓库保管人员禁止（  ）。',['A.戴手套','B.穿工作服','C.穿易产生静电的丝绸、合成纤维类服装','D.穿硬底鞋'],'C'],
+        [23,'国家对严重危及生产安全的工艺、设备实行（  ）制度。',['A.加强技术改造','B.淘汰','C.逐步退出市场','D.严格管理'],'B'],
+        [24,'企业主管安全生产的负责人对安全生产工作负（  ）责任。',['A.主要领导','B.直接领导','C.全部领导','D.次要领导'],'B'],
+        [25,'手持电动工具的负荷线（  ）。',['A.可以有接头，但不得超过2处','B.不得有接头','C.可以有接头，但不得超过3处','D.可以有接头'],'B'],
+        [26,'室外220V照明灯具距地面不得低于（  ），室内220V照明灯具距地面不得低于（  ）。',['A.2.5m，2m','B.3m，2.5m','C.4m，3m','D.3m，2m'],'B'],
+        [27,'行灯应采用安全电压，其额定电压值不应超过（  ）。',['A.36V','B.24V','C.220V','D.12V'],'B'],
+        [28,'应急预案是指为有效预防和控制可能发生的事故，最大程度减少事故及其造成的损害而预先制定的（  ）。',['A.工作计划','B.工作流程','C.工作方案','D.工作标准'],'C'],
+        [29,'对比色是使安全色更加醒目的反衬色，包括（  ）两种颜色。',['A.红、黄','B.黑、白','C.红、白','D.黄、黑'],'B'],
+        [30,'施工现场的所有避雷装置的冲击接地电阻值不应大于（  ）。',['A.4Ω','B.8Ω','C.10Ω','D.30Ω'],'D'],
+        [31,'下列对"本质安全"理解不正确的是（  ）。',['A.是安全生产管理预防为主的根本体现','B.设备或设施含有内在的防止发生事故的功能','C.包括设备本身固有的失误安全和故障安全功能','D.可以是事后采取完善措施而补偿的'],'D'],
+        [32,'生产经营单位必须为从业人员提供符合国家标准和行业标准的（  ），并监督、教育从业人员按照使用规则佩戴、使用。',['A.作业用具','B.劳动防护用品','C.作业工具','D.工作服'],'B'],
+        [33,'建设工程实行施工总承包的，由总承包单位对施工现场的安全生产负（  ）。',['A.次要责任','B.连带责任','C.总责','D.主要责任'],'C'],
+        [34,'安全生产监督管理部门和负有安全生产监督管理职责的有关部门应当逐级上报事故情况，每级上报的时间不得超过（  ）。',['A.1小时','B.12小时','C.24小时','D.2小时'],'D'],
+        [35,'安全生产许可证有效期满需要延期的，企业应当于期满前（  ）个月办理延期手续。',['A.2','B.3','C.6','D.1'],'B'],
+        [36,'（  ）负责本单位从业人员安全培训工作。',['A.安全监督部门','B.生产经营单位','C.上级主管部门','D.行业主管部门'],'B'],
+        [37,'某单位发生一起死亡1人的生产安全事故，该单位主要负责人不应当做的是（  ）。',['A.坚守岗位','B.及时、准确地上报','C.立即组织抢救','D.立即处理事故责任人'],'D'],
+        [38,'施工单位（  ）在尚未竣工的建筑物内设置员工集体宿舍。',['A.可以','B.不得','C.不宜','D.经过批准可以'],'B'],
+        [39,'高处作业高度为20m时，为（  ）高处作业。',['A.三级','B.特级','C.一级','D.二级'],'A'],
+        [40,'工频安全电压有效值的限值为（  ）。',['A.110V','B.220V','C.36V','D.50V'],'D'],
+        [41,'国务院负责安全生产监督管理的部门是（  ）。',['A.交通部','B.水利部','C.住房和城乡建设部','D.国家安全生产监督管理总局（应急管理部）'],'D'],
+        [42,'（  ）负责水利行业的安全监督管理。',['A.交通部','B.住建部','C.水利部','D.国家安监总局'],'C'],
+        [43,'对危险源的控制方法主要有（  ）。①技术控制；②个人行为控制；③管理控制；④环境控制。',['A.①②③','B.②③④','C.①②④','D.①③④'],'A'],
+        [44,'水利水电工程施工三级重大危险源：可能造成3~9人死亡，或者（  ）重伤，或者1000万元以上5000万元以下直接经济损失的危险源。',['A.50~99人','B.3~10人','C.10~49人','D.1~2人'],'C'],
+        [45,'应急演练按照组织形式可以分为（  ）和实战演练。',['A.检验性演练','B.应急救援','C.单项演练','D.桌面演练'],'D'],
+        [46,'下列关于混凝土吊罐入仓的说法不正确的是（  ）。',['A.吊罐正下方严禁站人，吊罐在空间摇晃时，应立即扶拉稳固','B.起吊前，指挥人员应得到两侧挂罐人员的明确信号，才能指挥起吊','C.吊时应慢速，并应在吊离地面30-50cm时进行检查','D.吊罐吊至仓面，下落到一定高度时，应减慢下降、转向，并避免紧急刹车，以免晃荡撞击人体'],'A'],
+        [47,'某建筑安装工程造价1亿，水利水电施工企业安全生产费用至少应提取（  ）。',['A.500万','B.300万','C.100万','D.200万'],'D'],
+        [48,'根据《中华人民共和国职业病防治法》，向用人单位提供可能产生职业病危害的化学品、放射性同位素和含有放射性物质的材料的，说明书应当载明（  ）相关内容。',['A.安全使用注意事项、职业病防护、应急救治措施','B.以上全对','C.产品特性、主要成分','D.存在的有害因素、可能产生的危害后果'],'B'],
+        [49,'依据《水利水电工程施工通用安全技术规程》，在石棉瓦、木板条等轻型或简易结构上施工及进行修补、拆装作业时，应采取可靠的防止（  ）坠落的防护措施。',['A.踩空','B.以上都是','C.因材料折断','D.滑倒'],'B'],
+        [50,'最常用的止血法是（  ）。',['A.指压止血法','B.以上都对','C.加压包扎止血法','D.止血带止血法'],'B'],
+        [51,'滑动模板施工过程中，所有电气装置均接地，接地电阻应不大于（  ）。',['A.10Ω','B.8Ω','C.5Ω','D.4Ω'],'D'],
+        [52,'水利水电工程施工二级重大危险源：可能造成（  ）死亡，或者50人~99人重伤，或者1亿元以下直接经济损失的危险源。',['A.1~2人','B.10~15人','C.3~10人','D.10~29人'],'D'],
+        [53,'配电箱、开关箱应装设在（  ）。',['A.易受液体浸溅及热源烘烤的场所','B.有严重损伤作用的瓦斯、烟气、蒸气、液体及其它有害介质环境中','C.干燥、通风及常温场所','D.易受外来物体撞击、强烈振动的场所'],'C'],
+        [54,'以下不属于水利水电施工企业常用的隐患排查方式的是（  ）。',['A.季节性检查与节假日检查','B.定期综合检查与专业专项检查','C.定点检查','D.日常检查'],'C'],
+        [55,'职业健康安全管理体系的运行模式可以追溯到一系列的系统思想，最主要的是PDCA模式，是指（  ）。',['A.策划→评价→实施→改进','B.评价→策划→实施→改进','C.策划→实施→评价→改进','D.评价→实施→策划→改进'],'C'],
+        [56,'应急预案评审应坚持实事求是的工作原则，结合本企业工作实际，按照《生产经营单位生产安全事故应急预案编制导则》和有关行业规范，从（  ）进行评审。①符合性 ②适用性 ③完整性 ④科学性。',['A.①②','B.①④','C.①②③④','D.②③'],'C'],
+        [57,'作业高度在30m以上时，为（  ）高处作业。',['A.III级','B.I级','C.IV级','D.II级'],'C'],
+        [58,'《中华人民共和国职业病防治法》中所称用人单位是指（  ）。',['A.企业、事业单位和个体经济组织','B.全民所有制企业','C.企业、事业单位、政府机关','D.企业、科研单位和政府机关'],'A'],
+        [59,'根据《水利水电工程施工通用安全技术规程》，易燃物品堆存时，堆垛不应过高、过密，堆垛之间，以及堆垛与堤墙之间应留有一定间距，主要通道的宽度最小不能小于（  ），每个仓库应规定贮存限额。',['A.2m','B.2.5m','C.1.5m','D.1m'],'A'],
+        [60,'下列关于《中华人民共和国突发事件应对法》的阐述中错误的是（  ）。',['A.它是一部综合性法律','B.它具有强制性','C.它是一部行政法规','D.它属于公法范围'],'C'],
+        [61,'水利水电施工企业主要负责人、项目负责人、专职安全生产管理人员，每年再培训时间不少于（  ）。',['A.12学时','B.24学时','C.32学时','D.30学时'],'A'],
+        [62,'装乳化炸药和重铵油炸药时，对干孔应将输药软管末端下至孔口填塞段以下（  ）处，对水孔应将输药软管末端尽量下至孔底。',['A.0.5~1m','B.0.5~0.7m','C.0.3~0.7m','D.0.3~0.5m'],'A'],
+        [63,'施工生产现场临时的机动车道路，人行通道宽度不宜小于（  ）。',['A.0.8m','B.0.6m','C.0.9m','D.0.7m'],'B'],
+        [64,'从事电气作业的人员，应持特种作业操作证方能上岗；（  ）严禁从事电气作业。',['A.无证人员','B.非电工及无证人员','C.非电工','D.非技术工'],'B'],
+        [65,'漏电保护器的选择应符合有关要求，开关箱内的漏电保护器其额定漏电电流应不大于（  ），额定漏电动作时间应小于（  ）。',['A.30mA，0.1s','B.20mA，0.1s','C.30mA，0.2s','D.20mA，0.2s'],'A'],
+        [66,'高度超过（  ）的落地式钢管脚手架工程专项方案应按有关规定，由施工企业组织召开专家论证会。',['A.40m（含）','B.50m（含）','C.60m（含）','D.30m（含）'],'B'],
+        [67,'施工企业进场后，应根据施工内容、施工条件、设计要求制定施工方案，报（  ）审批后执行。',['A.项目经理','B.项目法人','C.总监理工程师','D.监理单位'],'D'],
+        [68,'对超过一定规模的危险性较大的单项工程，施工项目部应编制专项施工方案，并组织（  ）专家对专项施工方案进行审查论证。',['A.9名及以上','B.5名及以上','C.3名及以上','D.7名及以上'],'B'],
+        [69,'生产安全事故单位负责人在接到生产安全事故报告后，应在（  ）之内向项目主管部门、安全生产监督机构、事故发生地县级以上人民政府安全监督管理部门和有关部门报告。',['A.3h','B.1h','C.12h','D.6h'],'B'],
+        [70,'下列（  ）属于超过一定规模的危险性较大的单项工程。',['A.临时用电工程','B.水上作业工程','C.围堰工程','D.拆除、爆破工程'],'D'],
+        [71,'《安全标志及其使用导则》（GB2894）的规定。施工项目安全防护与警示标识应使用安全色，黄色代表（  ）。',['A.传递允许、安全的信息','B.传递注意、警告的信息','C.传递禁止、停止、危险或提示消防设备、设施的信息','D.传递必须遵守规定的指令性信息'],'B'],
+        [72,'县级以上地方各级人民政府负有安全生产监督管理职责的部门应当将（  ）事故隐患纳入相关信息系统。',['A.较大','B.严重','C.重大','D.特别重大'],'C'],
+        [73,'对不履行职责导致事故整改和防范措施没有（  ）的有关单位和人员，应当按照有关规定追究责任。',['A.改进','B.落实','C.实施','D.制定'],'B'],
+        [74,'生产经营单位的主要负责人未履行安全生产法规定的安全生产管理职责，导致发生较大事故的，处上一年年收入百分之（  ）的罚款。',['A.八十','B.六十','C.一百','D.四十'],'B'],
+        [75,'生产经营单位的其他负责人和安全生产管理人员未履行本法规定的安全生产管理职责，导致发生生产安全事故的，暂停或者（  ）其与安全生产有关的资格。',['A.撤销','B.吊销','C.取缔','D.终止'],'B'],
+        [76,'生产经营单位未如实记录安全生产教育和培训情况，逾期未改正的，对其直接负责的主管人员和其他直接责任人员处（  ）的罚款。',['A.一万元以上二万元以下','B.五万元以上十万元以下','C.二万元以上五万元以下','D.三万元以上十万元以下'],'C'],
+        [77,'餐饮等行业的生产经营单位使用燃气未安装可燃气体报警装置的，责令限期改正，处（  ）万元以下的罚款。',['A.一','B.三','C.十','D.五'],'D'],
+        [78,'生产经营单位对重大事故隐患排查治理情况未按照规定报告，逾期未改正的，对其直接负责的主管人员和其他直接责任人员处（  ）的罚款。',['A.五万元以上十万元以下','B.三万元以上十万元以下','C.一万元以上二万元以下','D.二万元以上五万元以下'],'D'],
+        [79,'生产经营单位占用、锁闭、封堵生产经营场所或者员工宿舍出口、疏散通道，构成犯罪的，依照法律有关规定追究（  ）责任。',['A.事故','B.行政','C.刑事','D.民事'],'C'],
+        [80,'生产经营单位存在重大事故隐患，一百八十日内三次或者一年内（  ）次受到安全生产法规定的行政处罚的，有关部门应当依法吊销其有关证照。',['A.四','B.七','C.六','D.五'],'A'],
+        [81,'国家鼓励生产经营单位投保（  ）。',['A.工伤保险','B.安全生产责任保险','C.财产保险','D.意外伤害保险'],'B'],
+        [82,'生产安全事故发生单位造成6人以上10人以下死亡，或者30人以上50人以下重伤，或者3000万元以上5000万元以下直接经济损失的较大事故负有责任的，处（  ）的罚款。',['A.50万元以上70万元以下','B.10万元以上20万元以下','C.70万元以上100万元以下','D.20万元以上50万元以下'],'C'],
+        [83,'施工现场临时设施中的职工宿舍，每间宿舍居住人员不得超过（  ）。',['A.8人','B.4人','C.16人','D.6人'],'C'],
+        [84,'施工单位购买的劳动防护用品，须经本单位的（  ）验收。',['A.采购人员','B.行政办公室','C.安全技术部门','D.项目经理'],'C'],
+        [85,'建筑施工企业每年主要依据（  ）等开展企业安全生产标准化自评工作。',['A.《建筑施工安全检查标准》','B.《施工现场临时用电安全技术规范》','C.《建筑施工高处作业安全技术规范》','D.《施工企业安全生产评价标准》'],'D'],
+        [86,'施工现场临时用电设备在（  ）台及以上或设备总容量在（  ）kW及以上者，应编制用电组织设计。',['A.2台、20kW','B.3台、30kW','C.4台、40kW','D.5台、50kW'],'D'],
+        [87,'施工现场临时用电架空线路的档距不得大于（  ）。',['A.50m','B.20m','C.100m','D.35m'],'D'],
+        [88,'施工现场停止作业（  ）以上时，应将动力开关箱断电上锁。',['A.4小时','B.8小时','C.1小时','D.2小时'],'C'],
+        [89,'安全带必须（  ）。',['A.平挂','B.低挂高用','C.高挂低用','D.以上全对'],'C'],
+        [90,'施工现场的安全防护栏杆应由（  ）和栏杆柱组成。',['A.水平拉线','B.上、中、下三道横杆','C.二道横杆','D.一道横杆'],'B'],
+        [91,'施工用的10kV及以下变压器装于地面时，应有0.5m的高台，高台的周围应装设栅栏，其高度不应低于（  ）。',['A.1.2m','B.1.7m','C.1m','D.1.5m'],'B'],
+        [92,'装载机、自卸车等机械作业现场应设专人指挥，作业范围内（  ）有人平土。',['A.不应','B.严禁','C.可以','D.不宜'],'A'],
+        [93,'基坑回填应（  ），防止压力失衡，破坏基础或构筑物。',['A.从左到右','B.从中间到两边','C.从右到左','D.分层对称'],'D'],
+        [94,'拌合机加料斗升起时，（  ）任何人在料斗下通过或停留。',['A.除操作人员外不准','B.允许','C.严禁','D.不准'],'C'],
+        [95,'安全生产费用应当优先用于满足安全生产（  ）支出或达到安全生产标准所需支出。',['A.危险源管理','B.警示标志','C.隐患整改','D.安全宣传'],'C'],
+        [96,'企业安全生产管理机构专职安全生产管理人员应当检查在建项目安全生产管理情况，重点检查（  ）情况。',['A.安全生产责任制落实','B.项目负责人、项目专职安全生产管理人员履责','C.安全防护设施','D.违章作业'],'B'],
+        [97,'《中华人民共和国宪法》是我国的（  ）。',['A.规范性文件','B.行政法规','C.根本大法','D.法律'],'C'],
+        [98,'漏电保护器（  ）使用前应启动漏电试验按钮试跳一次，试跳不正常时严禁继续使用。',['A.每天','B.每3天','C.每周','D.每10天'],'A'],
+        [99,'（  ）攀爬脚手架。',['A.可以','B.严禁','C.架子工可以','D.专职安全员可以'],'B'],
+        [100,'安全生产许可证的有效期为（  ）。',['A.3年','B.4年','C.1年','D.2年'],'A'],
+        [101,'施工单位对达到一定规模的危险性较大的工程应当编制（  ）。',['A.安全措施','B.专项施工方案','C.安全施工要求','D.施工计划'],'B'],
+        [102,'某工程项目施工作业人员经过安全教育培训后，仍然未戴安全帽就进入现场作业。从事故隐患的角度看，这种情况属于（  ）。',['A.环境的不良影响','B.管理上的缺陷','C.人的不安全行为','D.物的不安全状态'],'C'],
+        [103,'安全生产责任制是企业最基本的安全管理制度，是所有安全生产规章制度的（  ）。',['A.重要组成部分','B.前提','C.基础','D.核心'],'D'],
+        [104,'配电箱、开关箱的进出线应从箱子的（  ）进出。',['A.上部','B.后部','C.前部','D.底部'],'D'],
+        [105,'根据《水利水电工程土建施工安全技术规程》，深孔扩壶时，不应向孔内投掷起爆药包，孔深超过（  ）时，不应使用导火索引爆扩壶药包。',['A.4m','B.3.5m','C.3m','D.5m'],'D'],
+        [106,'危险化学品特种作业人员至少要具有（  ）或者相当于该文凭及以上文化程度。',['A.大学本科','B.高中','C.初中','D.中专'],'B'],
+        [107,'应急演练分成（  ）三个阶段。①演练计划；②演练准备；③演练实施；④演练总结。',['A.②③④','B.①③④','C.①②④','D.①②③'],'A'],
+        [108,'依据《水利水电工程施工通用安全技术规程》，对有酸碱等强腐蚀的场所，应采用（  ）。',['A.防振型照明器','B.耐酸碱型照明器','C.防尘型照明器','D.防爆型照明器'],'B'],
+        [109,'根据《中共中央国务院关于推进安全生产领域改革发展的意见》，下列关于责任追究不正确的是（  ）。',['A.依法依规制定各有关部门安全生产权力和责任清单，尽职照单免责、失职照单问责','B.对被追究刑事责任的生产经营者实施相应的行业禁入','C.建立企业生产经营全过程安全责任追溯制度','D.实行党政领导干部任期安全生产责任制，日常工作依责尽职、发生事故依责追究'],'B'],
+        [110,'根据《生产经营单位安全生产事故应急预案编制导则》规定，应急预案分为（  ）。',['A.专项预案','B.以上都是','C.综合预案','D.现场处置方案'],'B'],
+        [111,'根据《水利水电工程土建施工安全技术规程》，建筑基础或局部块体的拆除最适宜采用（  ）方法进行拆除。',['A.人工拆除','B.静力破碎','C.吊运方法','D.爆破法'],'B'],
+        [112,'根据《中共中央国务院关于推进安全生产领域改革发展的意见》，企业应加强风险管控，下列选项中不属于企业采取的安全预防措施的是（  ）。',['A.发生事故后及时报告','B.开展经常性的应急演练和人员避险自救培训','C.建立健全隐患排查治理制度','D.定期开展风险评估和危害辨识'],'A'],
+        [113,'根据《水电工程土建施工安全技术规程》，土方暗挖的循环应控制在（  ）内，开挖后应及时喷射混凝土加以封闭，尽快形成拱圈，应在安全受控的情况下，方可进行下一循环的施工。',['A.1~2m','B.1~1.5m','C.1.5~2m','D.2~3m'],'B'],
+        [114,'依据《水利水电起重机械安全规程》，起重机轨道的接地电阻，以及起重机上任何一点的接地电阻均最大不应大于（  ）。',['A.8Ω','B.10Ω','C.4Ω','D.2Ω'],'C'],
+        [115,'依据《水利水电工程施工通用安全技术规程》，下列对施工现场的轨道机车道路纵坡描述正确的是（  ）。',['A.轨道机车道路纵坡不大于6%','B.轨道机车道路纵坡不大于5%','C.轨道机车道路纵坡不大于2%','D.轨道机车道路纵坡不大于8%'],'C'],
+        [116,'下列不属于编制安全技术措施计划原则的是（  ）。',['A.预防为主的原则','B.安全措施计划应纳入企业生产经营计划中的原则','C.必要性和可行性的原则','D.轻重缓急突出重点的原则'],'B'],
+        [117,'依据《中华人民共和国劳动法》规定，特殊保护对象包括（  ）和未成年工。',['A.新入场职工','B.离岗职工','C.老职工','D.女职工'],'D'],
+        [118,'根据《水利水电工程土建施工安全技术规程》，爆破材料不应直接堆放在地面上，应采用方木和垫板垫高（  ）。',['A.20cm','B.25cm','C.18cm','D.30cm'],'A'],
+        [119,'洞室作业时遇不良地质构造或易塌方地段、有害气体逸出及地下涌水等突发事件，应（  ）。',['A.立即停工、并撤至安全地点','B.查清楚突发事件后再撤离','C.继续作业，同时报告','D.采取加固措施后继续作业'],'A'],
+        [120,'依据《水利水电工程施工通用安全技术规程》，使用过程中，乙炔瓶应放置在通风良好的场所，与氧气瓶的距离不应少于（  ）。',['A.15m','B.5m','C.10m','D.12m'],'B'],
+        [121,'安全生产目标管理计划应经（  ）审核、项目法人同意。',['A.建设单位','B.施工单位','C.设计单位','D.监理单位'],'D'],
+        [122,'（  ），施工项目部应组织制订、建立各项安全生产管理制度。',['A.项目立项前','B.项目开工前','C.项目开工后','D.设计交底前'],'B'],
+        [123,'施工项目部安全生产费用管理制度应明确安全费用（  ）的程序、费用审核、职责及权限等。',['A.使用、管理','B.管理、记录','C.管理、审核','D.使用、记录'],'A'],
+        [124,'项目开工前必须按规定及时为从业人员办理（  ），为高危作业人员购买人身意外伤害保险等。',['A.保险','B.工伤保险','C.医疗保险','D.临时保险'],'B'],
+        [125,'（  ）应有操作准用管理制度，坚持定人、定机、定岗，设立人机档案和运行记录。',['A.大、中型设备','B.大、中、小型设备','C.大型设备','D.中型设备'],'A'],
+        [126,'爆破、高边坡、隧洞、水上（下）、高处、交叉施工、大件运输、吊装、大型施工设备安装及拆除等危险作业应有（  ），并应设专人进行安全监护，做好记录。',['A.安全技术交底','B.专项安全技术方案','C.专项安全技术措施','D.专项施工方案'],'C'],
+        [127,'高边坡下层开挖之前，必须完成（  ）的安全防护措施。作业过程中应有专人现场监护。',['A.上层','B.下层','C.上层、中层','D.中层'],'A'],
+        [128,'隧洞暂停作业期间，应对洞口进行（  ）。',['A.设置安全警示标志','B.设置安全防护设施','C.临时封闭','D.设置1m以上警戒线'],'C'],
+        [129,'施工项目部应根据施工设计图纸、（  ）编制爆破技术设计方案，其中应包括安全技术措施，按相关规定报批后实施。',['A.施工现场实际情况','B.勘测结果','C.参建各方意见','D.设计单位意见'],'A'],
+        [130,'可能造成重大安全事故的危险源为（  ）。',['A.一级重大危险源','B.三级重大危险源','C.二级重大危险源','D.四级重大危险源'],'C'],
+        [131,'（  ）是对危险源的各种危险因素、发生事故的可能性及损失与伤害程度等进行调查、分析、论证等，以判断危险源风险等级的过程。',['A.危险源辨识','B.危险源评价','C.安全风险评估','D.安全风险辨识'],'C'],
+        [132,'施工项目部应采用综合检查、专项检查、（  ）、节假日检查和日常检查等方式开展事故隐患排查。',['A.雨季检查','B.汛前检查','C.季节性检查','D.冬季检查'],'C'],
+        [133,'施工企业、施工项目部应对照分解的各自安全生产目标任务每半年进行（  ）自查和考核。',['A.三次','B.一次','C.四次','D.两次'],'B'],
+        [134,'《安全标志及其使用导则》（GB2894）的规定。施工项目安全防护与警示标识应使用安全色，红色代表（  ）。',['A.传递必须遵守规定的指令性信息','B.传递禁止、停止、危险或提示消防设备、设施的信息','C.传递注意、警告的信息','D.传递允许、安全的信息'],'B'],
+        [135,'（  ）事故隐患排查治理情况应当及时向负有安全生产监督管理职责的部门和职工大会或者职工代表大会报告。',['A.严重','B.重大','C.特别重大','D.较大'],'B'],
+        [136,'负有安全生产监督管理职责的部门对不属于本部门职责的（  ），需要由其他有关部门进行调查处理的，转交其他有关部门处理。',['A.上访事项','B.报告事项','C.举报事项','D.投诉事项'],'C'],
+        [137,'承担安全评价、认证、检测、检验职责的机构租借资质、挂靠、出具虚假（  ）的，没收违法所得。',['A.证明','B.文件','C.报告','D.结论'],'C'],
+        [138,'对承担安全评价、认证、检测、检验职责的机构及其直接责任人员，租借资质、挂靠的，吊销其相应资质和资格，（  ）不得从事相应工作。',['A.五年内','B.一年内','C.半年内','D.两年内'],'A'],
+        [139,'生产经营单位的主要负责人未履行安全生产法规定的安全生产管理职责的，责令限期改正，处（  ）的罚款。',['A.四万元以上十万元以下','B.二万元以上五万元以下','C.一万元以上二万元以下','D.三万元以上十万元以下'],'B'],
+        [140,'生产经营单位的主要负责人未履行安全生产法规定的安全生产管理职责，导致发生一般事故的，处上一年年收入百分之（  ）的罚款。',['A.一百','B.八十','C.四十','D.六十'],'C'],
+        [141,'生产经营单位未按照规定设置安全生产管理机构或者配备安全生产管理人员、注册（  ）的，责令限期改正，并处罚款。',['A.造价工程师','B.建造师','C.安全工程师','D.消防工程师'],'C'],
+        [142,'生产经营单位未采取措施消除事故隐患的，责令立即消除或者限期消除，处（  ）万元以下的罚款。',['A.五','B.十','C.三','D.一'],'A'],
+        [143,'生产经营单位的从业人员不落实岗位安全责任，不服从管理，违反安全生产规章制度或者操作规程的，由生产经营单位给予批评教育，依照有关规章制度给予（  ）。',['A.处分','B.拘留','C.罚款','D.处罚'],'A'],
+        [144,'习近平总书记提出：发展绝不能以牺牲（  ）为代价。这必须作为一条不可逾越的红线。',['A.生态环境','B.经济发展','C.精神文明','D.人的生命'],'D'],
+        [145,'各级政府要落实（  ）责任，依法依规、严管严抓。',['A.上下管理','B.企业管理','C.属地管理','D.分级管理'],'C'],
+        [146,'《中华人民共和国安全生产法》（2021年版）对生产经营单位的主要负责人的安全生产职责增加了：组织制定并实施本单位的（  ）。',['A.安全技术操作规程','B.安全生产教育和培训计划','C.安全生产责任制','D.安全检查制度'],'B'],
+        [147,'工会依法对安全生产工作进行（  ）。',['A.监督','B.检查','C.管理','D.评价'],'A'],
+        [148,'生产安全事故发生单位造成3人以上6人以下死亡，或者10人以上30人以下重伤，或者1000万元以上3000万元以下直接经济损失的较大事故负有责任的，处（  ）的罚款。',['A.70万元以上100万元以下','B.10万元以上20万元以下','C.50万元以上70万元以下','D.20万元以上50万元以下'],'C'],
+        [149,'生产安全事故发生单位造成10人以上15人以下死亡，或者50人以上70人以下重伤，或者5000万元以上7000万元以下直接经济损失的重大事故负有责任的，处（  ）的罚款。',['A.100万元以上300万元以下','B.300万元以上500万元以下','C.1000万元以上1500万元以下','D.500万元以上1000万元以下'],'A'],
+        [150,'生产安全事故发生单位造成30人以上40人以下死亡，或者100人以上120人以下重伤，或者1亿元以上1.2亿元以下直接经济损失的特别重大事故负有责任的，处（  ）的罚款。',['A.500万元以上1000万元以下','B.300万元以上500万元以下','C.1000万元以上1500万元以下','D.100万元以上300万元以下'],'A'],
+        [151,'施工企业应根据施工组织设计、专项安全施工方案编制和审批权限的设置，分级进行（  ），编制人员应参加。',['A.验收','B.安全技术交底','C.安全教育','D.检查'],'B'],
+        [152,'施工企业的特种作业人员安全继续教育的培训时间是（  ）。',['A.30学时','B.24学时','C.12学时','D.16学时'],'B'],
+        [153,'施工现场临时设施中的职工宿舍，室内净高不得小于（  ）。',['A.2.5m','B.3m','C.2m','D.2.3m'],'A'],
+        [154,'施工现场临时设施中的职工宿舍应保证必要的生活空间，宿舍人员人均面积不得小于（  ）。',['A.2㎡','B.2.5㎡','C.3㎡','D.1.5㎡'],'B'],
+        [155,'施工现场固定式配电箱、开关箱的中心点与地面的垂直距离应为（  ）。',['A.1.4~1.6m','B.1.2m','C.1m','D.0.8m'],'A'],
+        [156,'我国安全生产的方针是（  ）。',['A.安全第一、预防为主、综合治理','B.安全为了生产、生产必须安全','C.安全第一、预防为主','D.管生产必须管安全'],'A'],
+        [157,'支、拆模板时，不得同时在上下同一垂直面内立体交叉作业。无法避免时，应设置（  ）。',['A.专人监护','B.专项安全防护设施','C.联系方式','D.加强上下联系'],'B'],
+        [158,'未造成人员伤亡的一般事故，县级人民政府可以委托（  ）组织事故调查组进行调查。',['A.事故发生单位','B.事故发生单位的行业主管部门','C.事故发生项目的项目法人','D.事故发生单位的上级主管部门'],'A'],
+        [159,'项目经理对承包项目工程生产经营过程中的安全生产工作负（  ）责任。',['A.主要领导','B.全面领导','C.技术领导','D.直接领导'],'B'],
+        [160,'建筑施工企业的（  ）负责制定环境因素和危险源的纠正和预防措施，并验证结果。',['A.安全管理部门','B.技术部门','C.工会','D.项目经理'],'A'],
+        [161,'非电气作业人员（  ）操作电气设备。',['A.不得','B.可以','C.在有人监护下可以','D.经领导同意可以'],'A'],
+        [162,'吊运过程中，重物上（  ）站人。',['A.在有人监护下可以','B.可以','C.起重指挥人员可以','D.严禁'],'D'],
+        [163,'重大危险源是指长期或临时地生产、搬运、使用或者储存危险物品，且危险物品的（  ）超过临界量单元（包括场所和设施）。',['A.数量等于或者','B.能量','C.危险度等于或者','D.种类等于或者'],'A'],
+        [164,'生产经营单位必须为从业人员提供符合国家标准和行业标准的（  ），并监督、教育从业人员按照使用规则佩戴、使用。',['A.作业用具','B.劳动防护用品','C.工作服','D.作业工具'],'B'],
+        [165,'根据生产安全事故造成的人员伤亡或者直接经济损失，将生产安全事故分为（  ）四个等级。',['A.特大事故、重大事故、一般事故和轻微事故','B.特大事故、重大事故、较大事故和轻微事故','C.特别重大事故、重大事故、一般事故和轻微事故','D.特别重大事故、重大事故、较大事故和一般事故'],'D'],
+        [166,'特种设备是指对人身和财产安全有（  ）的设备。',['A.较大危险性','B.一般危险性','C.较小危险性','D.较大危险性的'],'A'],
+        [167,'企业在安全生产许可证有效期内，严格遵守有关安全生产的法律法规，（  ），安全生产许可证有效期届满时，经原安全生产许可证颁发管理机关同意，不再审查，安全生产许可证有效期延期。',['A.未发生经营亏损的','B.受到省级有关部门表扬的','C.受到市级有关部门表扬的','D.未发生死亡事故的'],'D'],
+        [168,'施工生产区内机动车辆临时道路在悬崖陡坡、路边临空边缘除应设有警示标志外，还应设有（  ）等安全防护设施。',['A.安全墩、挡墙','B.提示标语','C.拉设安全绳','D.防护栏杆'],'A'],
+        [169,'根据《企业安全生产费用提取和使用管理办法》（财企〔2012〕16号）的要求，水利水电施工企业安全生产费用提取标准为建筑安装工程造价的（  ）。',['A.2%','B.1%','C.1.5%','D.2.5%'],'A'],
+        [170,'下列选项中关于《中共中央国务院关于推进安全生产领域改革发展的意见》不正确的是（  ）。',['A.首部以中共中央、国务院名义印发的安全生产文件','B.由国家安全生产监督管理局发布','C.标志着我国安全生产领域的改革发展进入新阶段','D.明确了安全生产领域改革发展的主要方向和时间表路线图'],'B'],
+        [171,'《中华人民共和国职业病防治法》规定，产生职业病危害的用人单位，应当在醒目位置设置公告栏，公布内容不包括（  ）。',['A.职业病危害事故应急救援措施','B.费用的使用明细','C.规章制度','D.操作规程'],'B'],
+        [172,'工伤保险基金留有一定比例储备金，用于统筹地区重大事故的工伤保险待遇支付，不足由统筹地区的（  ）垫付。',['A.社会保险行政部门','B.人民政府','C.安全生产监督管理部门','D.行业协会'],'B'],
+        [173,'（  ）是安全生产的基础法，是综合规范安全生产法律制度的法律。',['A.《中华人民共和国安全生产法》','B.《立法法》','C.《宪法》','D.《刑法》'],'A'],
+        [174,'采用轨道运输方式，使用机车牵引装运混凝土的车辆，若两辆机车在同一轨道上同向行驶时，均应加强观望，特别是位于后面的机车应随时准备采取制动措施，行驶时两车相距不应小于（  ）。',['A.60m','B.50m','C.40m','D.30m'],'A'],
+        [175,'申报职业危害时，应当提交《职业病危害项目申报表》和（  ）。①用人单位的基本情况；②工作场所职业病危害因素种类、分布情况；③工作场所职业病危害因素接触人数；④法律、法规和规章规定的其他文件、资料。',['A.①②③④','B.①③④','C.①②③','D.②③④'],'A'],
+        [176,'依据《水利水电施工通用安全技术规程》，下面对施工生产区内机动车辆临时道路纵坡描述不合理的是（  ）。',['A.临时道路纵坡为2%','B.临时道路纵坡为8%','C.临时道路纵坡为15%','D.临时道路纵坡为6%'],'C'],
+        [177,'某发电厂拟在某市郊区开发工程项目，根据《建设工程安全生产管理条例》的规定，该开发公司应当向工程所在地的区政府建设局申请领取施工许可证。申请领取施工许可证的时间最迟应当在（  ）。',['A.确定监理单位前','B.项目工程竣工验收前','C.确定施工单位前','D.项目工程开工前'],'D'],
+        [178,'下列生产性毒物中，不属于物理性有害因素的是（  ）。',['A.噪声','B.激光','C.紫外线','D.石棉尘'],'D'],
+        [179,'根据《水利水电工程施工重大危险源辨识及评价导则》，土方边坡高度大于（  ）或滑坡地段开挖作业，宜列入重大危险源重点评价对象进行辨识。',['A.10m','B.20m','C.30m','D.50m'],'C'],
+        [180,'根据《水利水电工程金属结构与机电设备安装安全技术规程》以下关于闸门试验与试运行说法不正确的是（  ）。',['A.闸门试验与试运行前，应对启闭机与闸门进行全面验收检查，确认设备运行范围无障碍物阻塞','B.闸门启闭机可以不用进行空载试运行，直接连接闸门，进行闸门的启闭试验和负荷试验','C.空载调试时，应对启闭机的开度指示和安全防护装置进行初步调试','D.闸门启闭前，应确认启闭机的开度指示和安全防护装置进行初步调试'],'B'],
+        [181,'水利水电施工企业安全生产标准化一级得分标准为：评审得分（  ）以上（含），且各一级评审项目得分不得低于应得分的70%。',['A.85分','B.90分','C.80分','D.75分'],'B'],
+        [182,'物体温度为下列（  ）时，生产环境可能存在紫外线。',['A.1500摄氏度','B.880摄氏度','C.900摄氏度','D.1100摄氏度'],'A'],
+        [183,'根据《水利水电工程土建施工安全技术规程》，采用静力破碎法拆除建筑基础应遵循的规定不包括（  ）。',['A.建筑基础破碎拆除时，挖出的土方应及时运出现场或清理出工作面，在基坑边沿2m内严禁堆放物料','B.采用静力破碎作业时，操作人员应戴防护手套和防护眼镜','C.在相邻的两孔之间，严禁钻孔与注入破碎剂施工同步进行','D.建筑基础暴露和破碎时，发生异常情况，应即时停止作业，查清原因并采取相应措施后，方可继续施工'],'A'],
+        [184,'根据《水利水电工程施工通用安全技术规程》，机车轨道的外侧应设有宽度至少不小于（  ）的人行通道，人行通道临空高度大于2.0m，边缘应设置防护栏杆。',['A.1.2m','B.0.6m','C.1.0m','D.0.5m'],'B'],
+        [185,'水利水电施工企业应建立（  ），明确记录的管理职责及记录的填写、收集、标识、贮存、保护、检索、保留和处置要求，并严格执行。',['A.记录管理制度','B.安全生产考核奖惩制度','C.文件管理制度','D.安全生产责任制'],'A'],
+        [186,'适用于出血速度和出血量不是很快、很大的止血法是（  ）。',['A.指压止血法','B.以上都对','C.止血带止血法','D.加压包扎止血法'],'D'],
+        [187,'应急管理包括（  ）阶段，贯穿于事故发生前、中、后的整个过程中，体现了"预防为主、常备不懈"的应急理念。',['A.五个','B.三个','C.两个','D.四个'],'D'],
+        [188,'施工现场的废弃水泥袋必须进行（  ）或无害化处理，严禁就地焚烧。',['A.回收','B.丢弃','C.掩埋','D.焚烧'],'A'],
+        [189,'防汛期间，施工企业的（  ）应带队汛期值班，做好值班记录。',['A.项目主要负责人','B.项目安全员','C.总工','D.项目主要技术负责人'],'A'],
+        [190,'施工运输设备及车辆宜在相对固定场点停放，纵坡大于（  ）的地段不得停放机动车。',['A.5%','B.6%','C.3%','D.8%'],'A'],
+        [191,'负责事故调查处理的国务院有关部门和地方人民政府应当在批复事故调查报告后（  ），组织有关部门对事故整改和防范措施落实情况进行评估。',['A.半年内','B.三年内','C.一年内','D.两年内'],'C'],
+        [192,'生产经营单位未将事故隐患排查治理情况如实记录或者未向从业人员通报，逾期未改正的，责令停产停业整顿，并处（  ）的罚款。',['A.五万元以上十万元以下','B.一万元以上三万元以下','C.二万元以上五万元以下','D.十万元以上二十万元以下'],'D'],
+        [193,'生产经营单位未建立安全风险分级管控制度或者未按照安全风险分级采取相应管控措施的，责令限期改正，处（  ）万元以下的罚款。',['A.一','B.五','C.十','D.三'],'C'],
+        [194,'事故发生单位主要负责人漏报事故的，处上一年年收入（  ）的罚款。',['A.40%~60%','B.60%~80%','C.80%~100%','D.100%'],'C'],
+        [195,'事故发生单位造成40人以上50人以下死亡，或者120人以上150人以下重伤，或者1.2亿元以上1.5亿元以下直接经济损失的特别重大事故负有责任的，处（  ）的罚款。',['A.500万元以上1000万元以下','B.300万元以上500万元以下','C.100万元以上300万元以下','D.1000万元以上1500万元以下'],'D'],
+        [196,'事故发生单位造成50人以上死亡，或者150人以上重伤，或者1.5亿元以上直接经济损失的特别重大事故负有责任的，处（  ）的罚款。',['A.1000万元以上1500万元以下','B.1500万元以上2000万元以下','C.300万元以上500万元以下','D.500万元以上1000万元以下'],'B'],
+        [197,'生产经营单位的安全生产管理机构的职责不包括：（  ）。',['A.组织或者参与本单位安全生产教育和培训','B.组织或者参与本单位应急救援演练','C.组织或者参与拟定本单位安全生产规章制度','D.负责实施本单位重大危险源的安全管理'],'D'],
+        [198,'生产经营单位对重大危险源应当登记建档，进行定期检测、评估、监控，并制定（  ）。',['A.应急预案','B.应急措施','C.管理措施','D.防范措施'],'A'],
+        [199,'施工企业的专职安全生产管理人员安全继续教育的培训时间是（  ）。',['A.20学时','B.12学时','C.16学时','D.30学时'],'A'],
+        [200,'施工现场移动式配电箱、开关箱的中心点与地面的垂直距离应为（  ）。',['A.0.5m','B.0.8~1.6m','C.1.7m','D.0.7m'],'B'],
+        [201,'乙炔瓶在使用时必须（  ）放置。',['A.平躺','B.倾斜','C.没有要求','D.直立'],'D'],
+        [202,'企业技术负责人对安全生产工作负（  ）责任。',['A.技术领导','B.直接领导','C.主要领导','D.次要领导'],'A'],
+        [203,'动火作业应办理（  ）。',['A.安全教育签字','B.安全技术交底书','C.动火许可证','D.工作票'],'C'],
+        [204,'生产经营单位的特种作业人员，必须按照国家有关法律、法规的规定接受专门的安全培训，经考核合格，取得（  ）后，方可上岗作业。',['A.培训合格证书','B.岗位合格证书','C.特种作业操作资格证书','D.技能等级证书'],'C'],
+        [205,'建筑施工总承包资质序列企业安全生产管理机构安全生产管理人员的配备应满足下列（  ）要求，并应根据企业经营规模、设备管理和生产需要予以增加。',['A.一级资质不少于3人，二级和二级以下资质企业不少于2人','B.不少于2人','C.特级资质不少于6人，一级资质不少于4人，二级和二级以下资质企业不少于3人','D.特级资质不少于4人，一级资质不少于3人，二级和二级以下资质企业不少于2人'],'C'],
+        [206,'脚手架、排架的搭设、拆除作业人员必须经过专业培训，并取得（  ）持证上岗。',['A.安全培训合格证','B.特种作业操作证','C.岗位合格证书','D.岗位等级证书'],'B'],
+        [207,'根据《水利水电施工企业安全生产标准化评审标准（试行）》，水利水电施工企业应至少每年组织一次（  ）培训和演练。',['A.生产安全事故应急知识','B.安全生产标准化知识','C.特种设备','D.消防'],'A'],
+        [208,'水利水电施工企业的（  ）应明确安全教育培训的对象与内容、组织与管理、检查等要求。',['A.安全目标管理制度','B.安全责任制度','C.安全生产工作计划','D.安全教育培训制度'],'D'],
+        [209,'2016年12月18日，党中央、国务院公布的《中共中央国务院关于推进安全生产领域改革发展的意见》中指出要坚守不可逾越的红线是指（  ）。',['A.安全是企业发展的第一方针','B.发展要与时俱进，不能以生命为代价','C.安全绝不能以牺牲发展为代价','D.发展绝不能以牺牲安全为代价'],'D'],
+        [210,'工伤保险基金留有一定比例储备金，用于统筹地区重大事故的工伤保险待遇支付，不足由统筹地区的（  ）垫付。',['A.人民政府','B.行业协会','C.社会保险行政部门','D.安全生产监督管理部门'],'A'],
+        [211,'《国务院关于进一步加强企业安全生产工作的通知》中，赋予了企业生产现场相关人员在遇到危险时第一时间下达停产撤人命令的直接决策权和指挥权。以下不在此类人员之列的是（  ）。',['A.调度人员','B.生产现场带班人员','C.班组长','D.一般员工'],'D'],
+        [212,'根据《水利水电工程施工通用安全技术规程》，从事放射性工作人员，应接受定期检查，至少每（  ）进行一次职业性体检，若发现有不适应症时，应酌情予以减少接触，短期脱离、疗养或调离等处理。',['A.季度','B.1年','C.2年','D.半年'],'B'],
+        [213,'根据《建设工程安全生产管理条例》的规定，施工单位应当在（  ）设置明显的安全警示标志。',['A.电梯井口、基坑边沿','B.施工现场入口处','C.以上全对','D.脚手架'],'C'],
+        [214,'（  ）是指危害和整改难度较小，发现后能够立即整改排除的隐患。',['A.轻微事故隐患','B.重大事故隐患','C.一般事故隐患','D.重要事故隐患'],'C'],
+        [215,'对于事故的预防和控制，工程技术对策着重解决（  ）。',['A.管理的缺陷','B.物的不安全状态','C.有害的作业环境','D.人的不安全行为'],'B'],
+        [216,'以下哪些不属于危险性较大的作业现场设置的安全警示标志和警示牌应包含的内容（  ）。',['A.名称、地点','B.责任人员、事故模式','C.控制措施','D.预案内容'],'D'],
+        [217,'根据《中共中央国务院关于推进安全生产领域改革发展的意见》，企业应加强风险管控，下列选项中不属于企业采取的安全预防措施的是（  ）。',['A.定期开展风险评估和危害辨识','B.开展经常性的应急演练和人员避险自救培训','C.建立健全隐患排查治理制度','D.发生事故后及时报告'],'D'],
+        [218,'劳务分包单位施工人员在200人及以上的，应当配备3名及以上专职安全生产管理人员，并根据所承担的单元工程施工危险实际情况增加，不得少于工程施工人员总人数的（  ）。',['A.5‰','B.8‰','C.10‰','D.15‰'],'A'],
+        [219,'根据《水利水电工程施工重大危险源辨识及评价导则》，土方边坡高度大于（  ）或滑坡地段开挖作业，宜列入重大危险源重点评价对象进行辨识。',['A.50m','B.20m','C.10m','D.30m'],'D'],
+        [220,'根据《水利水电工程施工通用安全技术规程》，使用有毒物品作业场所应当设置（  ）色区域警示线、警示标志；高毒作业场所应当设置（  ）色区域警示线、警示标志。',['A.蓝、黄','B.蓝、红','C.黄、红','D.黄、蓝'],'C'],
+        [221,'依据《水利水电工程施工通用安全技术规程》，安全网应随建筑物升高而提高，下列安全网距离工作面的高度不合理的是（  ）。',['A.1.5m','B.2.5m','C.0.5m','D.3.5m'],'D'],
+        [222,'依据《水利水电工程施工作业人员安全操作规程》，数台推土机在同一工作面作业时，应保持一定距离，前后相距不少于（  ）。',['A.5m','B.6m','C.7m','D.8m'],'D'],
+        [223,'依据《水利水电工程施工通用安全技术规程》，对于砂石料生产机械的安全性能描述不正确的有（  ）。',['A.安装的基础应坚固','B.接地电阻不应大于4Ω','C.基础各部位连接螺栓紧固可靠，不应松动','D.接地电阻不应小于4Ω'],'D'],
+        [224,'根据《建设项目安全设施"三同时"监督管理办法》，除特殊规定以外的水利工程建设项目的安全设施设计，由（  ）组织审查，形成书面报告备查。',['A.建设行政主管部门','B.安全生产监督管理部门','C.生产经营单位','D.当地人民政府'],'A'],
+        [225,'施工企业、施工项目部每年至少应组织（  ）安全生产法律法规、规章制度、标准、安全生产管理制度和安全操作规程的检查评估。',['A.四次','B.两次','C.三次','D.一次'],'D'],
+        [226,'施工项目部提取的安全费用应专门核算，建立安全费用使用台账。台账应（  ）、年度汇总。',['A.按月复核、季度统计','B.按月统计、季度复核','C.按季统计、复核','D.按月统计、复核'],'B'],
+        [227,'可能造成重大安全事故的危险源为（  ）。',['A.二级重大危险源','B.四级重大危险源','C.三级重大危险源','D.一级重大危险源'],'A'],
+        [228,'施工企业、施工项目部应对照分解的各自安全生产目标任务每半年进行（  ）自查和考核。',['A.四次','B.三次','C.两次','D.一次'],'D'],
+        [229,'国务院应急管理部门（  ）建立全国统一的生产安全事故应急救援信息系统。',['A.牵头','B.应当','C.负责','D.必须'],'A'],
+        [230,'危险物品的生产、经营、储存、装卸单位以及建筑施工、运输单位的主要负责人和安全生产管理人员未按照规定经考核合格的，责令限期改正，处（  ）万元以下的罚款。',['A.十','B.一','C.三','D.五'],'A'],
+        [231,'根据《中华人民共和国安全生产法》（2021年版）的规定，生产安全事故调查处理的原则是：（  ）。',['A.实事求是、尊重科学','B.科学严谨、依法依规、实事求是、注重实效','C.公平、公正、公开','D.以事实为根据、以法律为准绳'],'B'],
+        [232,'（  ）及以上风力时，应停止焊接、切割等室外动火作业。',['A.五级','B.六级','C.七级','D.四级'],'A'],
+        [233,'氧气瓶距明火应大于（  ）。',['A.3m','B.10m','C.15m','D.5m'],'B'],
+        [234,'（  ）高处作业人员应挂牢安全带。',['A.带电','B.悬空','C.强风','D.夜间'],'B'],
+        [235,'水利工程施工现场（  ）专职安全生产管理人员。',['A.应该有','B.可以设兼职安全员，不设','C.必须有','D.不一定有'],'C'],
+        [236,'下列属于水利水电工程施工一级重大危险源的是（  ）。',['A.可能造成10人死亡或可能造成40人重伤的危险源','B.可能造成30人死亡或可能造成60人重伤的危险源','C.可能造成10人死亡或可能造成95人重伤的危险源','D.可能造成20人死亡或可能造成80人重伤的危险源'],'B'],
+        [237,'下列关于水利水电施工企业租赁设备和分包单位的设备说法有误的是（  ）。',['A.设备租赁合同或工程分包合同中应明确双方的设备管理安全责任和设备技术状况要求等','B.租赁设备由原设备所有者负责管理','C.租赁设备或分包单位的设备应纳入本单位设备安全管理范畴，按要求进行管理','D.租赁设备或分包单位的设备进入施工现场验收合格后投入使用'],'B'],
+        [238,'根据《中华人民共和国职业病防治法》，（  ）应当按照国家有关规定，安排职业病病人进行治疗、康复和定期检查。',['A.医疗卫生机构','B.用人单位','C.地方卫生行政部门','D.安全监督管理部门'],'B'],
+        [239,'依据《水利工程建设安全生产管理规定》，项目法人应当向施工单位提供的有关资料不包括（  ）。',['A.气象和水文观测资料','B.工程建设相关法律法规、技术标准等有关资料','C.施工现场及施工可能毗邻区域内供水、排水、供电、供热、通讯、广播电视等地下管线资料','D.拟建工程可能影响的相关建筑物和构筑物、地下工程的有关资料'],'B'],
+        [240,'根据《中华人民共和国职业病防治法》，对产生严重职业病危害的作业岗位，应当在醒目位置设置（  ）。',['A.警示说明','B.警示标识和中文警示说明','C.警示标识和英文警示说明','D.警示标识'],'B'],
+        [241,'根据《中华人民共和国防汛条例》规定，国务院设立国家防汛总指挥部，负责组织全国的防汛抗洪工作，其办事机构设在（  ）。',['A.各县级水行政主管部门','B.国务院水行政主管部门','C.各市级水行政主管部门','D.各省级水行政主管部门'],'B'],
+        [242,'《中华人民共和国安全生产法》（2021年版）规定，对作业场所存在的危险因素、防范措施以及事故应急措施，生产经营单位具有（  ）从业人员的义务。',['A.预防','B.监督','C.告知','D.知情'],'C'],
+        [243,'施工企业应当成立（  ），设置负责安全生产管理工作的独立职能部门。',['A.安全生产领导小组','B.安全生产领导委员会','C.安全生产领导人员','D.安全生产管理部门'],'B'],
+        [244,'（  ）在编制工程概算时，应按有关规定计列建设工程安全作业环境及安全施工措施所需费用。',['A.施工单位','B.监理单位','C.设计单位','D.建设单位'],'D'],
+        [245,'施工项目部应参与建设单位组织的防洪度汛演练，或自行组织（  ）至少一次防洪度汛演练。',['A.每年','B.每月','C.每季度','D.每半年'],'A'],
+        [246,'施工项目部的宿舍、办公室、休息室等有人员活动的建筑构件的燃烧性能等级应为（  ）。',['A.D级','B.A级','C.B级','D.C级'],'B'],
+        [247,'特种设备安装、拆除必须由（  ）进行，并编制专项施工方案，报总监理工程师审批后实施。',['A.监理单位','B.有资质的单位','C.项目法人委托单位','D.施工单位'],'B'],
+        [248,'施工现场发生生产安全事故后，事故现场有关人员立即报告（  ），该人员按规定如实、及时上报企业负责人、监理机构、建设单位。',['A.监理员','B.项目负责人','C.项目技术负责人','D.安全员'],'B'],
+        [249,'承担安全评价、认证、检测、检验职责的机构出具失实报告的，责令停业整顿，并处（  ）的罚款。',['A.四万元以上十万元以下','B.二万元以上五万元以下','C.三万元以上十万元以下','D.一万元以上二万元以下'],'C'],
+        [250,'根据《建设工程安全生产管理条例》的规定，施工单位应当向作业人员提供安全防护用具和安全防护服装，并（  ）告知危险岗位的操作规程和违章操作危害。',['A.在三级教育中','B.书面','C.口头','D.由师傅'],'B'],
+        [251,'施工企业各管理层的（  ）应对管理范围内的安全技术管理负责。',['A.技术人员','B.专职安全员','C.行政负责人','D.技术负责人'],'D'],
+        [252,'施工企业的特种作业人员安全继续教育的培训时间是（  ）。',['A.24学时','B.12学时','C.16学时','D.30学时'],'A'],
+        [253,'交流弧焊机变压器的二次线长度不应大于（  ）。',['A.5m','B.20m','C.30m','D.10m'],'C'],
+        [254,'下列选项中关于《中共中央国务院关于推进安全生产领域改革发展的意见》不正确的是（  ）。',['A.标志着我国安全生产领域的改革发展进入新阶段','B.首部以中共中央、国务院名义印发的安全生产文件','C.明确了安全生产领域改革发展的主要方向和时间表路线图','D.由国家安全生产监督管理局发布'],'D'],
+        [255,'依据《水利水电工程施工通用安全技术规程》，地下工程，有高温、导电灰尘，且灯具距地面高度低于2.5m等场所的照明，电源电压不应大于（  ）。',['A.48V','B.72V','C.220V','D.36V'],'D'],
+        [256,'根据《中华人民共和国消防法》的规定，建设单位应当自依法取得施工许可证之日起（  ）内，将消防设计文件报公安机关消防机构备案，公安机关消防机构应当进行抽查。',['A.七个工作日','B.六个工作日','C.三个工作日','D.五个工作日'],'A'],
+        [257,'（  ）是编制应急预案的关键，所有应急预案都建立在风险分析的基础之上。',['A.成立预案编制工作组','B.风险评估','C.收集资料','D.收集资料'],'B'],
+        [258,'法律规定，分包单位应当服从总承包单位的安全生产管理，分包单位不服从管理导致生产安全事故的，由分包单位承担（  ）。',['A.主要责任','B.全部责任','C.部分责任','D.连带责任'],'A'],
+        [259,'拆除旧桥（涵）时，应先拆除桥面的附属设施及挂件、护栏，不宜采用（  ）方法进行桥梁主体部分的拆除。',['A.人工拆除','B.机械拆除','C.爆破法','D.静力破碎'],'D'],
+        [260,'遇（  ）以上大风、大雾、暴雨等恶劣天气，严禁开展临近带电体作业。',['A.六级','B.五级','C.四级','D.七级'],'A'],
+        [261,'从事焊接与气割作业的作业人员，作业时应按规定使用劳动防护用品，仰面焊接应扣紧衣领、扎紧袖口，戴好（  ）。',['A.防护衣','B.防护手套','C.防火帽','D.安全帽'],'C'],
+        [262,'对排查出的事故隐患，应当按照事故隐患的等级进行登记，建立事故隐患信息台帐，并按月、季、年进行统计、分析形成书面报告后报（  ）。',['A.监理工程师','B.监理单位','C.项目法人','D.建筑主管部门'],'C'],
+        [263,'生产经营单位的其他负责人和安全生产管理人员未履行本法规定的安全生产管理职责的，责令限期改正，处（  ）的罚款。',['A.二万元以上五万元以下','B.三万元以上十万元以下','C.四万元以上十万元以下','D.一万元以上三万元以下'],'D'],
+        [264,'生产经营单位关闭、破坏直接关系生产安全的监控、报警、防护、救生设备、设施，或者篡改、隐瞒、销毁其相关数据、信息的，责令限期改正，处（  ）万元以下的罚款。',['A.十','B.三','C.一','D.五'],'D'],
+        [265,'施工现场临时用电的架空线路必须采用（  ）。',['A.绝缘导线','B.裸线','C.裸铝线','D.铜线'],'A'],
+        [266,'建筑施工企业的（  ）负责每季度组织有关人员进行现场环境安全检查工作。',['A.总经理','B.安全管理部门','C.工会','D.董事长'],'C'],
+        [267,'夯土机械PE线的连接点不得少于（  ）。',['A.1处','B.2处','C.没有要求','D.3处'],'B'],
+        [268,'安全生产行政法规是由（  ）组织制定并批准公布的。',['A.国务院','B.全国人民代表大会专门委员会','C.国家安全生产监督管理总局','D.全国人民代表大会常务委员会'],'A'],
+        [269,'配电箱、开关箱周围应有足够（  ）同时工作的空间和通道。',['A.2人','B.多人','C.1人','D.3人'],'A'],
+        [270,'根据《建设工程安全生产管理条例》，对于起重吊装工程说法不正确的是（  ）。',['A.需要编制专项施工方案，并附安全验算结果','B.由专职安全生产管理人员现场监督','C.经专职安全生产管理人员签字后实施','D.施工单位应该在施工组织设计中编制安全技术措施'],'C'],
+        [271,'根据《中华人民共和国特种设备安全法》，对于需要报废的特种设备，特种设备使用单位应当向（  ）办理使用登记证书注销手续。',['A.原登记的负责特种设备安全监督管理的部门','B.国家安全监督管理总局','C.国务院负责特种设备安全监督管理的部门','D.负责特种设备安全监督管理的部门'],'A'],
+        [272,'高边坡开口线处应装设防护栏，其高度不小于（  ），防护栏与开口线的距离不小于（  ）。',['A.1m，1m','B.1.2m，1m','C.1.2m，1.2m','D.1m，1.2m'],'A'],
+        [273,'安全生产"三违"行为指的是（  ）。',['A.违章生产、违章指挥、违反劳动纪律','B.违章指挥、违章作业、违反劳动纪律','C.违章作业、违章指挥、违反操作规程','D.违章作业、违章指挥、违反安全制度'],'B'],
+        [274,'下列不属于堤防工程防汛抢险的原则是（  ）。',['A.减载平压','B.前堵后导','C.强身固脚','D.责任到人'],'D'],
+        [275,'因视觉环境的特点，使作业人员的瞳孔短时间缩小，从而降低视网膜上的照度，导致视觉模糊、视物不清楚。这种现象称为（  ）。',['A.暗适应','B.眩光效应','C.明适应','D.视错觉'],'B'],
+        [276,'某施工现场发生爆燃事故，政府有关部门和相关单位赶赴现场组织开展应急救援工作。根据《中华人民共和国安全生产法》（2021年版），关于事故应急救援的说法，错误的是（  ）。',['A.参与事故抢救的部门应当根据事故救援的需要采取警戒、疏散等措施','B.为支持、配合事故救援，任何单位和个人都应当无条件地提供一切便利','C.参与事故抢救的不同单位和部门应当服从统一指挥，并加强协同联动','D.单位负责人接到事故报告后，应当立即采取有效措施保护事故现场'],'D'],
+        [277,'如煤气中毒者能饮水，可给予（  ）或其他热饮料。',['A.温水','B.加糖茶水或者是浓茶','C.盐开水','D.冷水'],'B'],
+        [278,'在电力线路上工作，保证安全的技术措施是（  ）。',['A.停电；用绝缘杆；穿绝缘靴；使用个人保安线；悬挂标示牌和装设遮栏（围栏）','B.停电；用绝缘杆；接地；使用个人保安线；悬挂标示牌和装设遮栏（围栏）','C.停电；验电；接地；使用个人保安线；悬挂标示牌和装设遮栏（围栏）','D.停电；用绝缘杆；穿绝缘靴；使用工作保安线；悬挂标示牌和装设遮栏（围栏）'],'C'],
+        [279,'用于载人的升降机、吊篮绳安全系数为（  ）。',['A.4.5','B.6~10','C.14','D.5.5'],'C'],
+        [280,'根据《水工建筑物地下开挖工程施工规范》（SL378-2007），斜井、竖井井口应设阻车器、安全防护栏或安全门。竖井内应设置人行爬梯，每（  ）应设置休息平台，人行爬梯应设置护栏。',['A.8~12m','B.10~15m','C.6~10m','D.6~8m'],'B'],
+        [281,'根据《水利水电工程施工通用安全技术规程》（SL398-2007），乙炔瓶在使用、运输和储存时，环境温度不宜超过（  ）；超过时应采取有效的降温措施。',['A.35℃','B.30℃','C.40℃','D.45℃'],'C'],
+        [282,'安全帽上如标有"D"标记，是表示具有（  ）性能的安全帽。',['A.防砸','B.绝缘','C.防火','D.防辐射'],'B'],
+        [283,'根据《水利水电工程施工通用安全技术规程》，施工现场的消防通道应保持畅通，宽度不应小于（  ）。',['A.3m','B.3.5m','C.4m','D.4.5m'],'C']
+    ];
+    singleData.forEach(d => addSingle(d[0], d[1], d[2], d[3]));
+
+    // ----- 三、多选题 1-135 (完整录入) -----
+    const multiData = [
+        [1,'根据《中华人民共和国职业病防治法》，关于职业病诊断的说法，正确的有（  ）。',['A.劳动者应当在用人单位所在地进行职业病诊断','B.职业病诊断应当由取得《医疗机构执业许可证》的医疗卫生机构承担','C.没有证据否定职业病危害因素与病人临床表现之间的必然联系的，可以诊断为职业病','D.职业病诊断有争议的，由职业病诊断鉴定委员会作出裁决','E.承担职业病诊断的医疗卫生机构在任何情况下不得拒绝劳动者职业病诊断的要求'],'CE'],
+        [2,'要坚决落实安全生产责任制，切实做到（  ）。',['A.党政同责','B.领导问责','C.失职追责','D.一岗双责'],'ACD'],
+        [3,'安全生产规章制度归纳为五大制度，包括：（  ）。',['A.安全生产教育培训制度','B.安全生产责任制度','C.安全生产检查制度','D.安全生产资金保障制度'],'ABCD'],
+        [4,'施工单位应根据季节气候特点，做好施工人员的（  ）等工作。',['A.饮食卫生','B.卫生防疫','C.防暑降温、防寒保暖','D.防中毒'],'ABCD'],
+        [5,'施工现场的主要道路要进行硬化处理。裸露的场地和堆放的土方应采取（  ）等措施。',['A.覆盖','B.固化','C.绿化','D.洒水'],'ACD'],
+        [6,'建筑施工企业应对危险性较大的施工作业场所及具有尘毒危害的作业环境（  ）。',['A.设置职工吸烟处','B.设置安全警示标志','C.使用安全防护用品标志牌','D.设置职工休息处'],'BC'],
+        [7,'消防安全管理中，凡有下列问题为重大事故隐患：（  ）。',['A.消防重点部位未配备消防器材','B.食堂使用的液化气瓶到期未检验','C.封闭消防出口','D.施工现场未设消防车道'],'ABCD'],
+        [8,'员工的安全生产权利包括（  ）。',['A.教育培训权','B.拒绝工作权','C.工伤保险待遇权','D.知情权'],'ACD'],
+        [9,'根据《工伤保险条例》，关于工伤保险费缴纳的说法，正确的有（  ）。',['A.国务院社会保险行政部门负责批准行业差别费率及行业内费率档次的方案','B.工伤保险费根据以支定收、收支平衡的原则确定费率','C.用人单位和职工缴纳工伤保险费数额为工资总额乘以缴费费率之积','D.统筹地区经办机构负责确定单位缴费费率','E.用人单位、职工个人应当按比例缴纳工伤保险费'],'BD'],
+        [10,'安全标志包括（  ）。',['A.警告标志','B.提示标志','C.禁止标志','D.指令标志'],'ABCD'],
+        [11,'建筑施工企业安全管理部门的安全生产职责包括（  ）。',['A.对职工进行体格普查和特种作业人员身体定期检查','B.组织开展安全教育培训与交流','C.宣传和贯彻国家有关安全生产的法律法规和标准','D.监督在建项目安全生产费用的使用'],'BCD'],
+        [12,'生产经营单位新建、改建、扩建工程项目的安全设施，必须与主体工程（  ）。',['A.同时发挥效益','B.同时投入生产和使用','C.同时施工','D.同时设计'],'BCD'],
+        [13,'建设工程的三级安全教育一般是指（  ）。',['A.班组','B.公司','C.工区','D.项目部'],'ABD'],
+        [14,'《中共中央国务院关于推进安全生产领域改革发展的意见》中的指导思想提出了安全生产领域改革发展的着力点，下列选项中正确的是（  ）。',['A.着力加强安全生产工作市场化','B.着力强化企业安全生产主体责任','C.着力解决不遵守法律法规的问题','D.着力堵塞监督管理漏洞'],'BCD'],
+        [15,'《中华人民共和国安全生产法》（2021年版）规定，生产经营单位应当具备的安全生产条件所必需的资金投入，由（  ）给予保证。',['A.个人经营的投资人','B.生产经营单位的决策机构、主要负责人','C.生产经营单位主管经营的负责人','D.生产经营单位主管生产的负责人'],'AB'],
+        [16,'依据《中华人民共和国消防法》，火灾扑灭后，发生火灾的单位和相关人员应当按照公安机关消防机构的要求（  ）。',['A.处罚事故责任人','B.如实提供与火灾有关的情况','C.保护现场','D.接受事故调查'],'BCD'],
+        [17,'根据《用人单位职业健康监护监督管理办法》，有权查阅、复印劳动者的职业健康监护档案的人员包括（  ）。',['A.劳动者近亲属','B.劳动者委托的代理人','C.安全生产行政执法人员','D.劳动者本人'],'ABCD'],
+        [18,'危险化学品如果储存不当，往往会酿成严重的事故，因此要防止不同性质物品在储存中相互接触而引起火灾或爆炸。下列物品中，必须单独隔离储存，不准与其它物品共存的有（  ）。',['A.TNT炸药','B.氮气','C.乙炔','D.雷管'],'AD'],
+        [19,'依据《建筑施工脚手架安全技术统一标准》，作用于脚手架的荷载应分为永久荷载和可变荷载。脚手架的永久荷载有（  ）。',['A.风荷载','B.脚手板的自重','C.脚手架结构件自重','D.安全网的自重'],'BCD'],
+        [20,'安全操作规程一般应包括的内容有（  ）。',['A.停止作业后的维护和保养方法','B.操作过程中有可能出现的危及安全的异常现象及紧急处理方法','C.操作必须遵循的程序和方法','D.禁止作业人员出现的不安全行为'],'ABCD'],
+        [21,'根据《水利水电工程土建施工安全技术规程》，石方爆破作业中，采用裸露药包爆破，应使炸药与被爆体有较大接触面积，炸药裸露面可用（  ）覆盖。',['A.碎石','B.黄泥土','C.水袋','D.砖瓦'],'BC'],
+        [22,'安全生产目标任务应包括以下（  ）等目标。',['A.考核绩效目标','B.应急管理目标','C.事故控制目标','D.教育培训目标'],'BCD'],
+        [23,'三级安全教育培训包括（  ）。',['A.公司安全教育培训','B.部门安全教育培训','C.班组安全教育培训','D.项目安全教育培训'],'ACD'],
+        [24,'脚手架验收时至少包括（  ）、间距、搭接长度等内容。',['A.斜撑','B.材料','C.扫地杆','D.螺帽'],'ABC'],
+        [25,'水上水下作业现场应配备（  ）等救生用品。',['A.救生圈','B.救生绳','C.救生衣','D.救生艇'],'ABC'],
+        [26,'危险源分为两个级别，分别为（  ）。',['A.较大危险源','B.一般危险源','C.重大危险源','D.特大危险源'],'BC'],
+        [27,'危险源的风险等级分为四级，由高到低依次为（  ）。',['A.重大风险','B.一般风险','C.低风险','D.较大风险'],'ABCD'],
+        [28,'生产经营单位主要负责人应当组织建立并落实（  ）双重预防工作机制，督促、检查本单位的安全生产工作，及时消除生产安全事故隐患。',['A.隐患排查治理','B.安全风险分级管控','C.全员安全生产责任制','D.安全生产标准化'],'AB'],
+        [29,'相关行业、领域、地区的生产安全事故应急救援信息系统，实现互联互通、信息共享，通过推行网上安全信息采集、安全监管和监测预警，提升监管（  ）的水平。',['A.信息化','B.现代化','C.精准化','D.智能化'],'CD'],
+        [30,'（  ）未设有符合紧急疏散需要、标志明显、保持畅通的出口、疏散通道，逾期未改正的，责令其生产经营单位停产停业整顿。',['A.施工现场','B.生产车间','C.生产经营场所','D.员工宿舍'],'CD'],
+        [31,'施工企业安全生产组织体系应包括：（  ）。',['A.各管理层的主要负责人','B.相关岗位人员','C.专兼职安全管理人员','D.各相关职能部门及专职安全生产管理机构'],'ABCD'],
+        [32,'施工企业安全生产教育培训计划应依据（  ）等需求进行编制。',['A.时间安排','B.对象','C.内容','D.类型'],'ABCD'],
+        [33,'职工符合工伤或视同工伤的规定，但有（  ）情形之一的，不得认定为工伤或视同工伤。',['A.自残或者自杀','B.吸毒','C.故意犯罪','D.醉酒'],'ABCD'],
+        [34,'各种类型的大模板，应按设计制作，每块大模板上应设有（  ）。',['A.防护栏杆','B.操作平台','C.起吊装置','D.上下梯道'],'ABCD'],
+        [35,'事故隐患分为（  ）。',['A.轻微事故隐患','B.重大事故隐患','C.一般事故隐患','D.较大事故隐患'],'BC'],
+        [36,'施工现场的照明设施应按以下要求布置：（  ）。',['A.一般场所宜选用额定电压大于220V的照明器','B.在特别潮湿的场所、导电良好的地面、锅炉或金属容器内工作的照明电源电压不应大于12V','C.地下工程，有高温、导电灰尘，灯具距地面高度低于2.5m等场所的照明，电源电压应不大于36V','D.在潮湿和易触及带电体场所的照明电源电压不得大于24V'],'BCD'],
+        [37,'发生（  ）情况时，各有关单位应及时重新组织危险源的辨识与评价，更新危险源信息。',['A.当安全生产法律法规、标准规范及其他要求发生变化时（包括新颁发、修订、替代、废止等情况）','B.相关方的抱怨明显增多时','C.采用新设备、新技术、新工艺、新材料前','D.工程现场施工发生重大调整和变化时'],'ACD'],
+        [38,'《建设工程安全生产管理条例》对于施工单位的相关培训做了明确的规定，这些规定包括（  ）。',['A.施工单位安全教育培训工作应在建设工程所在地安全生产监督管理部门的组织下进行，并接受所在地安全生产监督管理部门的考核','B.施工单位应当对管理人员和作业人员每年至少进行一次安全生产教育培训，其教育培训情况记入个人工作档案。安全生产教育培训考核不合格的人员，不得上岗','C.施工单位在采用新技术、新工艺、新设备、新材料时，应当对作业人员进行相应的安全生产教育培训','D.作业人员进入新的岗位或者新的施工现场前，应当接受安全生产教育培训。未经教育培训或者教育培训考核不合格的人员，不得上岗作业'],'BCD'],
+        [39,'依据《生产经营单位安全培训规定》，生产经营单位主要负责人安全培训内容包括（  ）。',['A.安全生产管理基本知识、安全生产技术、安全生产专业知识','B.应急管理、应急预案编制以及应急处置的内容和要求','C.职业危害及其预防措施','D.伤亡事故统计、报告及职业危害的调查处理方法'],'AC'],
+        [40,'围堰拆除一般应选择在（  ）进行。',['A.洪水时段','B.枯水时段','C.洪水季节','D.枯水季节'],'BD'],
+        [41,'安全生产是指在社会生产活动中，通过（  ）的和谐运作，使生产过程中潜在的各种事故风险和伤害因素始终处于有效控制状态，切实保护劳动者的生命安全和身体健康。',['A.人','B.机','C.料','D.法','E.环'],'ABCDE'],
+        [42,'根据《中华人民共和国防汛条例》，各级地方人民政府必须对所管辖的蓄滞洪区的（  ）等安全设施，以及紧急撤离和救生的准备工作进行汛前检查，发现影响安全的问题，及时处理。',['A.预报警报','B.撤退道路','C.通信','D.房屋'],'ABC'],
+        [43,'依据《中华人民共和国消防法》，公共消防设施、消防装备不足或者不适应实际需要的，应当（  ）。',['A.配置','B.改建','C.进行技术改造','D.增建'],'ABCD'],
+        [44,'根据《水利水电工程土建施工安全技术规程》，洞室爆破时，可以进行装起爆体及敷设爆破网路作业的人员有（  ）。',['A.经过爆破安全教育培训的临时作业人员','B.爆破工程技术人员','C.持证爆破员','D.爆破指挥员'],'BC'],
+        [45,'对于排查确定的重大事故隐患，水利水电施工企业应制定隐患治理方案，治理方案内容包括（  ）。',['A.机构和人员','B.经费和物资','C.目标和任务','D.方法和措施'],'ABCD'],
+        [46,'预警信息的发送包括下列几种形式（  ）。',['A.现场预警会议','B.网络通知','C.书面通知','D.电话通知'],'ABCD'],
+        [47,'依据《水利水电工程劳动安全与工业卫生设计规范》，下列关于起重机所采取的安全措施正确的有（  ）。',['A.对露天工作的轨道式起重机应安装可靠的夹轨钳和锚定装置','B.门式起重机轨道两端端部应设缓冲、止挡结构','C.桥式起重机轨道梁的门洞应设门','D.露天工作的起重机应装有显示瞬时风速的风级风速报警装置'],'ABCD'],
+        [48,'为保证压力容器安全运行，通常设置安全阀、爆破片等安全附件。下列关于安全阀、爆破片设置要求的说法中，正确的是（  ）。',['A.安全阀出口侧串联安装爆破片时，容器内介质应不含胶着物质','B.安全阀与爆破片并联组合时，安全阀开启压力应略低于爆破片的标定爆破压力','C.安全阀进口与容器间串联安装爆破片时，爆破片破损后泄放面积应小于安全阀的进口面积','D.安全阀与爆破片并联组合时，爆破片的标定爆破压力不得超过容器的设计压力'],'ABD'],
+        [49,'依据《国务院安委会办公室关于全面加强企业全员安全生产责任制工作的通知》，企业应明确所有层级、各类岗位从业人员的安全生产责任，建立起安全生产工作"（  ）"的工作体系。',['A.各负其责','B.主要负责人负责','C.层层负责','D.人人有责'],'ACD'],
+        [50,'依据《中华人民共和国安全生产法》，以下选项中，生产经营单位为确保安全生产必须要做到的有（  ）。',['A.改善安全生产条件，提高安全生产水平','B.推进安全生产标准化建设','C.遵守安全生产的法律、法规','D.建立健全安全生产责任制度'],'ABCD'],
+        [51,'依据《水利水电工程施工通用安全技术规程》，易燃易爆危险物品的采购、（  ）、销毁应有相应的防火消防安全措施和管理制度。',['A.回收','B.使用','C.储存','D.运输'],'ABCD'],
+        [52,'施工项目部应制订安全警示标志维护计划，明确规定（  ）。',['A.检查维护周期','B.维护责任人','C.维护方法','D.维护内容'],'ABCD'],
+        [53,'禁止（  ）生产经营场所或者员工宿舍的出口、疏散通道。',['A.占用','B.关闭','C.锁闭','D.封堵'],'ACD'],
+        [54,'生产经营单位进行（  ）等危险作业，未安排专门人员进行现场安全管理的，责令限期改正，处十万元以下的罚款。',['A.临时用电','B.吊装','C.动火','D.爆破'],'ABCD'],
+        [55,'生产经营场所和员工宿舍未设有（  ）的，责令其生产经营单位限期改正，并处五万元以下的罚款。',['A.疏散通道','B.保持畅通的出口','C.符合紧急疏散需要','D.标志明显'],'ABCD'],
+        [56,'生产经营单位的安全生产管理机构分为：（  ）的安全生产管理机构。',['A.二级机构','B.班组','C.施工项目','D.企业'],'CD'],
+        [57,'施工企业各管理层的职能部门及岗位应承担职能范围内与安全生产相关的职责，这些职能部门除了专职安全生产管理机构外，主要包括：（  ）。',['A.技术管理部门','B.动力设备管理部门','C.施工管理部门','D.材料管理部门'],'ABCD'],
+        [58,'重大危险源应当登记建档，登记建档应当包括重大危险源的（  ）等内容。',['A.名称','B.性质','C.地点','D.可能造成的危害'],'ABCD'],
+        [59,'施工单位应当为从事焊接作业的施工人员配备防止（  ）的劳动防护用品。',['A.触电','B.滑落','C.灼伤','D.强光'],'ACD'],
+        [60,'安全生产的"五要素"包括（  ）。',['A.安全责任','B.安全投入','C.安全文化','D.安全法制'],'ABCD'],
+        [61,'开动混凝土拌合机前，应检查（  ）是否良好。',['A.钢丝绳','B.倾倒机构','C.制动器','D.离合器'],'ABCD'],
+        [62,'施工现场内的危险源主要与（  ）有关。',['A.施工部位','B.作业人员','C.施工装置','D.分部分项工程'],'ACD'],
+        [63,'原材料在储存与运输过程中应有可靠的（  ）措施。',['A.防雨雪','B.防水','C.防散漏','D.防盗'],'ABC'],
+        [64,'达到一定规模的危险性较大的工程包括：（  ）。',['A.土方和石方开挖工程','B.基坑支护和降水工程','C.模板工程','D.混凝土工程'],'ABC'],
+        [65,'危险作业场所、机动车道交叉路口、易燃易爆有毒危险物品存放场所、库房、变配电场所以及禁止烟火等应设置相应的（  ）标志。',['A.警告','B.禁止','C.电力安全','D.指示'],'ABD'],
+        [66,'根据《水利水电工程金属结构与机电设备安装安全技术规程》，设备基础处理时，需遵守下列规定（  ）。',['A.在墙面或地板上开沟或打孔时，应采取防止往孔洞内掉落工具、杂物等的措施','B.开凿孔洞时，施工人员应穿安全防护服','C.开凿孔洞时，施工人员把握凿子的手不应戴手套','D.开凿孔洞时，施工人员应戴防护眼镜'],'AD'],
+        [67,'《安全生产违法行业行政处罚办法》不属于（  ）。',['A.地方政府安全生产行政规章','B.地方性安全生产行政规章','C.部门安全生产行政规章','D.省级安全生产行政规章'],'ABD'],
+        [68,'根据《企业安全生产应急管理九条规定》，企业在应急管理过程中必须开展从业人员岗位（  ），并定期组织考核。',['A.自救互救技能培训','B.操作规程培训','C.避险逃生技能培训','D.应急知识教育'],'ACD'],
+        [69,'依据《建筑基坑支护技术规程》规定，打入式钢管土钉的施工应符合（  ）。',['A.当不出现返浆时，可采用间歇注浆的方法','B.钢管端部严禁制成尖锥状','C.注浆压力不应大于0.6MPa','D.应在注浆至钢管周围出现返浆后停止注浆'],'AD'],
+        [70,'《国务院安委会关于进一步加强安全培训工作的决定》中全面提升安全培训质量包括（  ）。',['A.加强安全培训过程管理和质量评估','B.建立安全培训示范视频课程体系','C.强化现场安全培训','D.完善安全培训考试体系'],'ABCD'],
+        [71,'依据《水利水电工程劳动安全与工业卫生设计规范》，下列关于起重机所采取的安全措施正确的有（  ）。',['A.门式起重机轨道两端端部应设缓冲、止挡结构','B.桥式起重机轨道梁的门洞应设门','C.露天工作的起重机应装有显示瞬时风速的风级风速报警装置','D.对露天工作的轨道式起重机应安装可靠的夹轨钳和锚定装置'],'ABCD'],
+        [72,'项目部应建立班组安全活动管理制度，组织开展安全生产和（  ）、事故分析等岗位达标活动。',['A.安全操作技能训练','B.职业卫生教育培训','C.岗位作业危险预知','D.作业现场隐患排查'],'ABCD'],
+        [73,'施工企业应按分级管理组织（  ）等相关部门对安全技术措施的合规性、可行性、可靠性等进行全面分析、评价。',['A.质量','B.安全','C.监理','D.技术'],'ABD'],
+        [74,'水利水电工程物资仓储区重大危险源辨识依据（  ）。',['A.数量','B.储存物资的危险特性','C.环境的危险特性','D.仓储条件'],'ABD'],
+        [75,'落实安全生产责任制，坚持（  ），而且要党政同责、一岗双责、齐抓共管。',['A.管生产必须管安全','B.管资金必须管安全','C.管业务必须管安全','D.管行业必须管安全'],'ACD'],
+        [76,'要继续开展安全生产大检查，做到（  ），确保安全生产。',['A.零容忍','B.严执法','C.全覆盖','D.重实效'],'ABCD'],
+        [77,'根据2015年房屋市政工程发生的安全事故类别划分，占事故总量前四位的是（  ）。',['A.坍塌','B.物体打击','C.高处坠落','D.触电'],'ABC'],
+        [78,'对危险源进行辨识时，应充分考虑（  ）三种状态。',['A.异常','B.后果','C.紧急','D.正常'],'ACD'],
+        [79,'对于建筑生产过程和设备产生的噪声应采取（  ）或综合控制等措施。',['A.消声','B.吸声','C.减振','D.隔声'],'ABCD'],
+        [80,'安全生产工作机制是（  ）。',['A.行业自律和社会监督','B.职工参与','C.政府监管','D.生产经营单位负责'],'ABCD'],
+        [81,'用人单位的职工有下列情形之一的，应当认定为工伤（  ）。',['A.患职业病的','B.在工作时间和工作场所内，因工作原因受到事故伤害的','C.在抢险救灾等维护国家利益、公共利益活动中受到事故伤害的','D.在工作时间前后在工作场所内，从事与工作有关的预备性或者收尾工作受到事故伤害的'],'ABD'],
+        [82,'机械在运转过程中，禁止进行（  ）等工作。',['A.检查','B.检修','C.清扫','D.调整'],'BCD'],
+        [83,'施工单位应当制定消防安全管理制度，消防安全管理制度应包括下列主要内容（  ）。',['A.消防安全教育培训制度','B.用火、用电、用气管理制度','C.应急预案演练制度','D.消防安全检查制度'],'ABCD'],
+        [84,'安全生产事故隐患，是指生产经营单位违反安全生产法律、法规、规章、标准、规程和安全生产管理制度的规定，或者因其他因素在生产经营活动中存在可能导致事故发生的（  ）。',['A.管理缺陷','B.人的不安全行为','C.环境的不良影响','D.物的危险状态'],'ABD'],
+        [85,'依据《水利水电工程劳动安全与工业卫生设计规范》，下列项目需要投入劳动安全卫生设施的是（  ）。',['A.某小型水库的除险加固工程','B.某水库电站增效扩容改建工程','C.某县高效节水灌溉工程','D.某镇供水管网及扩能改造工程'],'ABCD'],
+        [86,'下列情况中，水利水电施工企业应及时组织隐患排查的是（  ）。',['A.企业操作条件或工艺改变','B.新建、改建、扩建项目建设','C.相关方进入、撤出或改变，对事故、事件或其他信息有新的认识','D.法律法规、标准规范发生变更或有新的公布'],'ABCD'],
+        [87,'安全生产管理就是针对人们在安全生产过程中的安全问题，运用有效的资源，发挥人们的智慧，通过人们的努力，进行有关（  ）等活动，实现生产过程中人与机器设备、物料环境的和谐，达到安全生产的目标。',['A.决策','B.计划','C.组织','D.控制'],'ABCD'],
+        [88,'依据《安全生产事故隐患排查治理暂行规定》，生产经营单位应当定期组织（  ）排查本单位的事故隐患。',['A.法人代表','B.其他相关人员','C.安全生产管理人员','D.工程技术人员'],'BCD'],
+        [89,'水利水电施工企业重大危险源档案应当包括（  ）。',['A.重大危险源关键装置、重点部位的责任人、责任机构名称','B.安全评估报告或者安全评价报告','C.重大危险源事故应急预案、评审意见、演练计划和评估报告','D.安全监测监控系统、措施说明、检测、检验结果'],'ABCD'],
+        [90,'生产经营单位应当进行安全培训的从业人员包括（  ）。',['A.主要负责人','B.特种作业人员','C.其他从业人员','D.安全生产管理人员'],'ABCD'],
+        [91,'根据《生产安全事故应急演练指南》，应急演练的目的主要包括（  ）。',['A.锻炼队伍','B.宣传教育','C.检验预案','D.完善准备'],'ABCD'],
+        [92,'特种作业操作证应当定期复审。根据《特种作业人员安全技术培训考核管理规定》，关于特种作业操作证复审的说法，正确的有（  ）。',['A.李某特种作业操作证申请复审前，应当参加不少于8个学时必要的安全培训并考试合格','B.赵某申请特种作业操作证复审的，考核发证机关应当在收到其申请之日20个工作日内完成复审','C.张某连续从事特种作业10年，经原考核发证机关同意，其特种作业操作证复审时间可以延长至每5年1次','D.王某特种作业操作证需要复审的，应当在有效期满前30日内向考核发证机关提出申请','E.孙某违章操作或者有违章行为并经查证确实的，则其特种作业操作证复审不予通过'],'AB'],
+        [93,'水利水电工程生活、办公区重大危险源辨识依据（  ）。',['A.环境的危险特性','B.作业持续时间','C.可能发生事故的后果','D.设备的危险特性'],'AC'],
+        [94,'国务院交通运输、住房和城乡建设、水利、民航等有关部门和县级以上地方人民政府建立健全相关（  ）的生产安全事故应急救援信息系统。',['A.部门','B.地区','C.行业','D.领域'],'BCD'],
+        [95,'习近平总书记提出，安全检查工作要做到"四不两直"，即（  ）。',['A.不发通知、不打招呼','B.不听汇报、不用陪同和接待','C.直奔基层','D.直插现场，暗查暗访'],'ABCD'],
+        [96,'施工企业应层层签订安全生产责任书，责任书的内容应主要包括安全生产的（  ）。',['A.职责','B.考核','C.奖惩标准','D.目标'],'ABCD'],
+        [97,'施工企业安全教育培训应包括（  ）等工作内容。',['A.组织实施','B.人员持证审核','C.培训效果考核','D.计划编制'],'ABC'],
+        [98,'施工现场配电箱、开关箱应有（  ）。',['A.分路标记','B.系统接线图','C.名称','D.用途'],'ABCD'],
+        [99,'消防安全管理中，凡有下列行为之一的为严重违章：（  ）。',['A.不举行消防演练','B.施工现场吸烟','C.明火作业无审批手续','D.在建筑工程主体内设置员工集体宿舍'],'BCD'],
+        [100,'生产安全事故处理的"四不放过"原则是指（  ）。',['A.整改措施未落实不放过','B.事故责任人和群众未受到教育不放过','C.事故原因没有查清不放过','D.事故责任人没有处理不放过'],'ABCD'],
+        [101,'建筑施工企业专职安全生产管理人员包括（  ）。',['A.安全部门组成人员','B.分管安全的副总经理','C.法定代表人','D.安全部门负责人'],'AD'],
+        [102,'生产经营单位采用（  ），必须了解、掌握其安全技术特性，采取有效的安全防护措施，并对从业人员进行专门的安全生产教育和培训。',['A.新工艺','B.新技术','C.新材料','D.新方法'],'ABC'],
+        [103,'依据《生产经营单位安全培训规定》，生产经营单位主要负责人安全培训内容包括（  ）。',['A.伤亡事故统计、报告及职业危害的调查处理方法','B.安全生产管理基本知识、安全生产技术、安全生产专业知识','C.职业危害及其预防措施','D.应急管理、应急预案编制以及应急处置的内容和要求'],'BC'],
+        [104,'安全生产目标制定时应考虑的因素有（  ）。',['A.上级机构的整体安全生产方针和目标','B.相关方的意见','C.适用法律法规、标准规范和其他要求','D.危险源辨识、评价和控制的结果'],'ACD'],
+        [105,'某企业为保持安全生产的持续稳定，对企业近十五年来发生的各类伤亡事故进行统计分析，研究企业安全管理存在的问题，制订预防事故的安全措施。采取的统计分析基本步骤包括（  ）。',['A.统计分析','B.整理资料','C.统计设计','D.收集资料'],'ABCD'],
+        [106,'现场急救的基本步骤包括（  ）。',['A.安全转移','B.脱离险区','C.检查伤（病）情','D.对症救治'],'ABCD'],
+        [107,'依据《爆破安全规程》，从带有电雷管的起爆药包或起爆体进入装药警戒区开始，装药警戒区内应停电，可采用（  ）照明。',['A.安全灯','B.安全蓄电池灯','C.绝缘手电筒','D.手机'],'ABC'],
+        [108,'施工项目部应在重大危险源现场设置明显的（  ）。',['A.安全监测监控系统','B.安全管理规章制度','C.安全警示标志','D.警示牌'],'CD'],
+        [109,'生产经营单位的（  ）未履行本法规定的安全生产管理职责，导致发生生产安全事故的，暂停或者吊销其与安全生产有关的资格，并处罚款。',['A.其他负责人','B.特种作业人员','C.主要负责人','D.安全生产管理人员'],'AD'],
+        [110,'生产经营单位拒不执行消除事故隐患命令的，责令停产停业整顿，对其（  ）处以罚款。',['A.主要负责人','B.其他负责人','C.直接负责的主管人员','D.其他直接责任人员'],'CD'],
+        [111,'对危险源进行辨识时，应充分考虑（  ）三种时态。',['A.将来','B.现在','C.正常','D.过去'],'ABD'],
+        [112,'员工的安全生产义务包括（  ）。',['A.积极参加各种文体活动','B.正确使用安全防护用品','C.发现事故隐患及时报告','D.遵章守规、服从管理'],'BCD'],
+        [113,'安全生产"四不伤害"是指（  ）。',['A.不伤害别人','B.保护他人不受伤害','C.不被他人伤害','D.不伤害自己'],'ABCD'],
+        [114,'根据事故的具体情况，事故调查组由（  ）派人组成，并应当邀请人民检察院派人参加。',['A.有关人民政府','B.监察机关','C.安全生产监督管理部门和负有安全生产监督管理职责的有关部门','D.公安机关以及工会'],'ABCD'],
+        [115,'依据《中华人民共和国消防法》，消防车、消防艇前往执行火灾扑救或者应急救援任务，在确保安全的前提下，不受（  ）的限制，其他车辆、船舶以及行人应当让行，不得穿插超越。',['A.行驶方向','B.行驶路线','C.行驶速度','D.指挥信号'],'ABCD'],
+        [116,'根据《水利水电工程施工通用安全技术规程》，下列关于炮孔装药与堵塞，正确的有（  ）。',['A.将起爆药包从孔中拔出或拉出时，应采取安全防护措施','B.深孔装药可用提绳将药放入孔中，药卷不应直接抛掷入孔','C.爆破炮孔四周的大块石应首先清除','D.利用机械装药不宜采用电力起爆，若应采用时，应使用抗静电雷管'],'BCD'],
+        [117,'依据《水利安全生产标准化评审管理暂行办法》，水利生产经营单位安全生产标准化自评报告内容应包括（  ）。',['A.基本条件的符合情况','B.自主评定结果','C.自主评定工作开展情况','D.单位概况及安全管理状况'],'ABCD'],
+        [118,'《国务院安委会关于进一步加强安全培训工作的决定》中全面提升安全培训质量包括（  ）。',['A.强化现场安全培训','B.加强安全培训过程管理和质量评估','C.完善安全培训考试体系','D.建立安全培训示范视频课程体系'],'ABCD'],
+        [119,'根据《中华人民共和国突发事件应对法》的规定，突发事件发生地的其他单位应当（  ）。',['A.配合人民政府采取的应急处置措施','B.并积极组织人员参加所在地的应急救援和处置工作','C.服从人民政府发布的决定、命令','D.做好本单位的应急救援工作'],'ABCD'],
+        [120,'依据《中华人民共和国安全生产法》，以下选项中，生产经营单位为确保安全生产必须要做到的有（  ）。',['A.遵守安全生产的法律、法规','B.改善安全生产条件，提高安全生产水平','C.建立健全安全生产责任制度','D.推进安全生产标准化建设'],'ABCD'],
+        [121,'根据《水利水电工程土建施工安全技术规程》，围堰采用爆破法拆除时，下列说法正确的是（  ）。',['A.采用水下钻孔爆破方案时，侧面应采用预裂爆破','B.应限制单段起爆的用药量','C.用水平钻孔爆破时，填塞物应用木楔楔紧','D.从事围堰爆破拆除工程的施工单位，应持有爆破资质证书'],'ABCD'],
+        [122,'生产经营单位必须遵守本法和其他有关安全生产的法律、法规，加强安全生产管理，构建（  ）双重预防机制，健全风险防范化解机制，确保安全生产。',['A.安全生产标准化','B.安全风险分级管控','C.隐患排查治理','D.全员安全生产责任制'],'BC'],
+        [123,'乡镇人民政府和街道办事处，以及（  ）等应当制定相应的生产安全事故应急救援预案。',['A.港区','B.工业园区','C.开发区','D.风景区'],'ABCD'],
+        [124,'习近平总书记提出，落实安全生产责任制，实行（  ）。',['A.行业主管部门直接监管','B.企业自我监管','C.地方政府属地监管','D.安全监管部门综合监管'],'ACD'],
+        [125,'施工单位应建立健全劳动防护用品的（  ）等管理制度。',['A.发放','B.购买','C.验收','D.使用'],'ABCD'],
+        [126,'建筑施工企业"三类人员"的安全生产考核包括（  ）。',['A.管理能力','B.技术职称','C.工作经历','D.安全生产知识'],'AD'],
+        [127,'（  ）高处作业使用的脚手架拆除时，应事先制定出安全可靠的措施才能进行拆除。',['A.三级','B.二级','C.悬空','D.特级'],'ACD'],
+        [128,'下列关于《中共中央国务院关于推进安全生产领域改革发展的意见》中的指导思想正确的是（  ）。',['A.牢固树立新发展理念，坚持安全发展，坚守发展决不能以牺牲安全为代价这条不可逾越的红线','B.坚持安全第一、预防为主、综合治理的方针','C.依靠严密的责任体系、严格的法治措施、有效的体制机制、有力的基础保障和完善的系统治理','D.进一步增强"四个意识"，紧紧围绕统筹推进"五位一体"总体布局和协调推进"四个全面"战略全局'],'ABCD'],
+        [129,'《中共中央国务院关于推进安全生产领域改革发展的意见》提出发挥市场机制推动作用，具体包括（  ）。',['A.完善工伤保险制度，加快制定工伤预防费用的提取比例、使用和管理具体办法','B.建立失信惩戒和守信激励机制','C.积极推进安全生产诚信体系建设，完善企业安全生产不良记录"黑名单"制度','D.取消安全生产风险抵押金制度，建立健全安全生产责任保险制度'],'ABCD'],
+        [130,'安全生产管理就是针对人们在安全生产过程中的安全问题，运用有效的资源，发挥人们的智慧，通过人们的努力，进行有关（  ）等活动，实现生产过程中人与机器设备、物料环境的和谐，达到安全生产的目标。',['A.计划','B.控制','C.组织','D.决策'],'ABCD'],
+        [131,'高危（  ）的生产经营单位未按照国家规定投保安全生产责任保险的，责令限期改正，并处罚款。',['A.作业','B.领域','C.风险','D.行业'],'BD'],
+        [132,'建立安全生产检查工作责任制，实行（  ）担责。',['A.谁负责','B.谁整改','C.谁签字','D.谁检查'],'ACD'],
+        [133,'依据《中华人民共和国劳动法》规定，从事（  ）的劳动者必须经过专门培训并取得特种作业资格方可上岗作业。',['A.登高架设作业','B.焊接与热切割作业','C.高压电工作业','D.低压电工作业'],'ABCD'],
+        [134,'甲公司印发了《甲公司注册安全工程师管理暂行办法》，规定从事安全工作的公司员工取得注册安全工程师证书的一次性奖励5000元，每月工资增加500元。安全管理人员小钱表示，这让他产生了学习的动力，每天下班后打游戏时间少了，学习时间多了，并且逢人就说会一直学习到考试那一天。小钱的这些做法体现个性倾向动机的相关功能有（  ）。',['A.激发功能','B.平衡功能','C.指向功能','D.维持功能','E.调节功能'],'ACDE'],
+        [135,'安全色包括（  ）。',['A.黄','B.绿','C.蓝','D.红'],'ABCD']
+    ];
+    multiData.forEach(d => addMulti(d[0], d[1], d[2], d[3]));
+
+    // ================================================================
+    // 随机抽题 + 组卷
+    // ================================================================
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function buildExam() {
+        const judges = raw.filter(q => q.type === 'judge');
+        const singles = raw.filter(q => q.type === 'single');
+        const multis = raw.filter(q => q.type === 'multi');
+
+        const shuffledJudges = shuffleArray([...judges]);
+        const shuffledSingles = shuffleArray([...singles]);
+        const shuffledMultis = shuffleArray([...multis]);
+
+        const selectedJudges = shuffledJudges.slice(0, 20);
+        const selectedSingles = shuffledSingles.slice(0, 52);
+        const selectedMultis = shuffledMultis.slice(0, 20);
+
+        return { judges: selectedJudges, singles: selectedSingles, multis: selectedMultis };
+    }
+
+    // ================================================================
+    // 应用状态
+    // ================================================================
+    let currentQuestions = [];
+    let timerInterval = null;
+    let timeSeconds = 7200;
+    let isSubmitted = false;
+
+    const container = document.getElementById('questionContainer');
+    const totalSpan = document.getElementById('totalCount');
+    const answeredSpan = document.getElementById('answeredCount');
+    const correctSpan = document.getElementById('correctCount');
+    const wrongSpan = document.getElementById('wrongCount');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultStats = document.getElementById('resultStats');
+    const finalCorrect = document.getElementById('finalCorrect');
+    const finalWrong = document.getElementById('finalWrong');
+    const finalScore = document.getElementById('finalScore');
+
+    // 格式化正确答案显示
+    function formatAnswer(q) {
+        if (q.type === 'judge') return q.answer === '√' ? '√' : '×';
+        if (q.type === 'single') return q.answer;
+        if (q.type === 'multi') return q.answer.slice().sort().join('');
+        return '';
+    }
+
+    function render() {
+        let html = '';
+        const groups = [
+            { label: '📘 判断题（20题，每题1分）', items: currentQuestions.filter(q => q.type === 'judge') },
+            { label: '📗 单选题（52题，每题1分）', items: currentQuestions.filter(q => q.type === 'single') },
+            { label: '📕 多选题（20题，每题2分）', items: currentQuestions.filter(q => q.type === 'multi') }
         ];
 
-        // ===== 状态 =====
-        let questions = rawQuestions.map(q => ({
-            ...q,
-            userAnswer: null,
-            answered: false,
-            correct: null,
-        }));
-
-        let currentFilter = 'all';
-        let timerSeconds = 20 * 60;
-        let timerInterval = null;
-        let isTimeUp = false;
-
-        // DOM
-        const container = document.getElementById('questionList');
-        const totalSpan = document.getElementById('totalCount');
-        const answeredSpan = document.getElementById('answeredCount');
-        const correctSpan = document.getElementById('correctCount');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timeoutMessage = document.getElementById('timeoutMessage');
-
-        // ===== 计时器 =====
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = sec % 60;
-            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        }
-
-        function updateTimerDisplay() {
-            timerDisplay.textContent = `⏱️ ${formatTime(timerSeconds)}`;
-            timerDisplay.classList.toggle('warning', timerSeconds <= 60);
-        }
-
-        function stopTimer() {
-            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-        }
-
-        function startTimer() {
-            stopTimer();
-            if (timerSeconds <= 0) {
-                timerSeconds = 20 * 60;
-                isTimeUp = false;
-                timeoutMessage.style.display = 'none';
-                render();
-            }
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerDisplay();
-                if (timerSeconds <= 0) {
-                    timerSeconds = 0;
-                    updateTimerDisplay();
-                    isTimeUp = true;
-                    stopTimer();
-                    timeoutMessage.style.display = 'block';
-                    render();
+        groups.forEach(group => {
+            if (group.items.length === 0) return;
+            html += `<div class="group-label">${group.label}</div>`;
+            group.items.forEach((q, idx) => {
+                const globalIdx = currentQuestions.indexOf(q);
+                const isAnswered = q.userAnswer !== null && (Array.isArray(q.userAnswer) ? q.userAnswer.length > 0 : true);
+                let statusSymbol = '';
+                let correctAnswerHtml = '';
+                if (isSubmitted && q.isCorrect !== null) {
+                    statusSymbol = q.isCorrect ? ' ✅' : ' ❌';
+                    const ansDisplay = formatAnswer(q);
+                    correctAnswerHtml = `<div class="correct-answer">✅ 正确答案：${ansDisplay}</div>`;
                 }
-            }, 1000);
-        }
-
-        function restartTimer() {
-            stopTimer();
-            timerSeconds = 20 * 60;
-            isTimeUp = false;
-            timeoutMessage.style.display = 'none';
-            updateTimerDisplay();
-            startTimer();
-            render();
-        }
-
-        // ===== 辅助 =====
-        function normalizeAnswer(ans) {
-            if (!ans) return [];
-            if (Array.isArray(ans)) return ans.map(s => s.trim().toUpperCase()).filter(Boolean);
-            if (typeof ans === 'string') return ans.split('').map(s => s.trim().toUpperCase()).filter(Boolean);
-            return [];
-        }
-
-        function isAnswerCorrect(q) {
-            if (!q.answered || q.userAnswer == null) return false;
-            const correct = normalizeAnswer(q.answer);
-            const user = normalizeAnswer(q.userAnswer);
-            if (q.type === 'single') {
-                return user.length === 1 && correct.length === 1 && user[0] === correct[0];
-            }
-            if (user.length !== correct.length) return false;
-            const su = [...user].sort(), sc = [...correct].sort();
-            return su.every((v, i) => v === sc[i]);
-        }
-
-        function computeStats() {
-            const total = questions.length;
-            const answered = questions.filter(q => q.answered).length;
-            const correct = questions.filter(q => q.correct === true).length;
-            totalSpan.textContent = total;
-            answeredSpan.textContent = answered;
-            correctSpan.textContent = correct;
-        }
-
-        function getFilteredQuestions() {
-            if (currentFilter === 'all') return questions;
-            if (currentFilter === 'single') return questions.filter(q => q.type === 'single');
-            if (currentFilter === 'multi') return questions.filter(q => q.type === 'multi');
-            if (currentFilter === 'unanswered') return questions.filter(q => !q.answered);
-            return questions;
-        }
-
-        // ===== 渲染 =====
-        function render() {
-            const filtered = getFilteredQuestions();
-            if (filtered.length === 0) {
-                container.innerHTML = `<div style="padding: 30px 16px; text-align:center; color: #4f6f8f;">没有符合条件的题目</div>`;
-                computeStats();
-                return;
-            }
-
-            let html = '';
-            filtered.forEach((q) => {
-                const realIndex = questions.indexOf(q);
-                const isSingle = q.type === 'single';
-                const typeLabel = isSingle ? '单选' : '多选';
-                const typeClass = isSingle ? 'single' : 'multi';
-
-                const userAns = q.userAnswer ? normalizeAnswer(q.userAnswer) : [];
-                const correctAns = normalizeAnswer(q.answer);
-                const shouldDisable = isTimeUp && !q.answered;
-
+                const qTypeLabel = q.type === 'judge' ? '判断题' : q.type === 'single' ? '单选题' : '多选题';
+                const qClass = isSubmitted && q.isCorrect !== null ? (q.isCorrect ? 'q-item correct' : 'q-item wrong') : 'q-item';
                 let optionsHtml = '';
-                q.options.forEach((optText, oi) => {
-                    const letter = String.fromCharCode(65 + oi);
-                    const isSelected = userAns.includes(letter);
-                    let extraClass = '';
-                    let disabled = false;
-
-                    if (q.answered || shouldDisable) {
-                        disabled = true;
-                        const isCorrectOpt = correctAns.includes(letter);
-                        if (isSelected && isCorrectOpt) extraClass = 'correct-answer';
-                        else if (isSelected && !isCorrectOpt) extraClass = 'wrong-answer';
-                        else if (!isSelected && isCorrectOpt) extraClass = 'correct-answer';
-                    } else {
-                        if (isSelected) extraClass = 'selected';
-                    }
-
-                    optionsHtml += `
-                        <div class="option-item ${extraClass} ${disabled ? 'disabled' : ''}" data-qidx="${realIndex}" data-letter="${letter}">
-                            <span class="option-marker">${letter}.</span>
-                            <span class="option-text">${optText.replace(/^[A-D]\.\s*/, '')}</span>
-                        </div>
-                    `;
-                });
-
-                let feedbackHtml = '';
-                if (q.answered) {
-                    const isCorrect = q.correct;
-                    const fbClass = isCorrect ? 'correct' : 'wrong';
-                    const correctDisplay = correctAns.join('、');
-                    let msg = isCorrect ? '✅ 回答正确' : '❌ 回答错误';
-                    feedbackHtml = `
-                        <div class="feedback ${fbClass}">
-                            <span class="answer-reveal">${msg}</span> 
-                            ${!isCorrect ? ` 正确答案：${correctDisplay}` : ''}
-                            ${isSingle ? '' : ` (选 ${correctDisplay})`}
-                        </div>
-                    `;
-                } else if (shouldDisable) {
-                    const correctDisplay = correctAns.join('、');
-                    feedbackHtml = `
-                        <div class="feedback wrong">
-                            <span class="answer-reveal">⏰ 时间到</span> 正确答案：${correctDisplay}
-                        </div>
-                    `;
+                if (q.type === 'judge') {
+                    optionsHtml = q.options.map(opt => {
+                        const checked = (q.userAnswer === opt);
+                        return `<label><input type="radio" name="q_${globalIdx}" value="${opt}" ${checked?'checked':''} ${isSubmitted?'disabled':''}> ${opt}</label>`;
+                    }).join('');
+                } else if (q.type === 'single') {
+                    optionsHtml = q.options.map((opt, oi) => {
+                        const val = String.fromCharCode(65 + oi);
+                        const checked = (q.userAnswer === val);
+                        return `<label><input type="radio" name="q_${globalIdx}" value="${val}" ${checked?'checked':''} ${isSubmitted?'disabled':''}> ${opt}</label>`;
+                    }).join('');
+                } else if (q.type === 'multi') {
+                    optionsHtml = q.options.map((opt, oi) => {
+                        const val = String.fromCharCode(65 + oi);
+                        const checked = (Array.isArray(q.userAnswer) && q.userAnswer.includes(val));
+                        return `<label><input type="checkbox" name="q_${globalIdx}" value="${val}" ${checked?'checked':''} ${isSubmitted?'disabled':''}> ${opt}</label>`;
+                    }).join('');
+                    optionsHtml += `<span class="multi-hint">（多选）</span>`;
                 }
-
-                let cardExtra = '';
-                if (q.answered && q.correct === true) cardExtra = 'correct-highlight';
-                else if (q.answered && q.correct === false) cardExtra = 'wrong-highlight';
-                else if (shouldDisable && !q.answered) cardExtra = 'wrong-highlight';
-
-                let submitArea = '';
-                if (q.type === 'multi' && !q.answered && !shouldDisable) {
-                    const hasSelection = q.userAnswer && q.userAnswer.length > 0;
-                    submitArea = `
-                        <div class="multi-submit-area">
-                            <button class="btn btn-primary submit-multi" data-qidx="${realIndex}" ${!hasSelection ? 'disabled' : ''}>📤 提交答案</button>
-                            <span class="hint">${hasSelection ? '已选 ' + userAns.join(', ') : '请至少选择一个选项'}</span>
-                        </div>
-                    `;
-                }
-
-                html += `
-                    <div class="question-card ${cardExtra}" data-qidx="${realIndex}">
-                        <div class="q-header">
-                            <span class="q-type ${typeClass}">${typeLabel}</span>
-                            <span style="font-size:0.8rem; color:#3f6185;">#${realIndex+1}</span>
-                        </div>
-                        <div class="q-text">${q.text}</div>
-                        <div class="options" data-qidx="${realIndex}">
-                            ${optionsHtml}
-                        </div>
-                        ${submitArea}
-                        ${feedbackHtml}
-                        <div class="action-row">
-                            <span class="status">${q.answered ? (q.correct ? '✓ 已答' : '✗ 已答') : (shouldDisable ? '⏰ 超时' : '⏳ 未答')}</span>
-                            ${q.answered ? `<button class="btn btn-outline reset-one" data-qidx="${realIndex}" style="padding:4px 14px; font-size:0.78rem; min-height:32px;">↺ 重答</button>` : ''}
-                        </div>
-                    </div>
-                `;
+                html += `<div class="${qClass}"><div class="q-title"><span class="q-type">${qTypeLabel}</span><span>#${q.id} ${statusSymbol}</span></div><div class="q-text">${q.text}</div><div class="options">${optionsHtml}</div>${correctAnswerHtml}</div>`;
             });
-
-            container.innerHTML = html;
-            computeStats();
-
-            // 事件绑定
-            document.querySelectorAll('.option-item:not(.disabled)').forEach(el => {
-                el.addEventListener('click', function(e) {
-                    if (isTimeUp) return;
-                    const qidx = parseInt(this.dataset.qidx);
-                    const letter = this.dataset.letter;
-                    handleOptionClick(qidx, letter);
-                });
-            });
-
-            document.querySelectorAll('.submit-multi').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    if (isTimeUp) return;
-                    const qidx = parseInt(this.dataset.qidx);
-                    handleMultiSubmit(qidx);
-                });
-            });
-
-            document.querySelectorAll('.reset-one').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const qidx = parseInt(this.dataset.qidx);
-                    resetSingleQuestion(qidx);
-                });
-            });
-        }
-
-        // ===== 交互 =====
-        function handleOptionClick(qidx, letter) {
-            if (isTimeUp) return;
-            const q = questions[qidx];
-            if (!q || q.answered) return;
-
-            if (q.type === 'single') {
-                q.userAnswer = letter;
-                q.answered = true;
-                q.correct = isAnswerCorrect(q);
-                render();
-            } else {
-                if (!q.userAnswer) q.userAnswer = [];
-                const arr = q.userAnswer;
-                const idx = arr.indexOf(letter);
-                if (idx > -1) arr.splice(idx, 1);
-                else arr.push(letter);
-                if (arr.length === 0) q.userAnswer = null;
-                render();
-            }
-        }
-
-        function handleMultiSubmit(qidx) {
-            if (isTimeUp) return;
-            const q = questions[qidx];
-            if (!q || q.answered) return;
-            if (!q.userAnswer || q.userAnswer.length === 0) {
-                alert('请至少选择一个选项');
-                return;
-            }
-            q.answered = true;
-            q.correct = isAnswerCorrect(q);
-            render();
-        }
-
-        function resetSingleQuestion(qidx) {
-            const q = questions[qidx];
-            q.userAnswer = null;
-            q.answered = false;
-            q.correct = null;
-            render();
-        }
-
-        function resetAllProgress() {
-            questions.forEach(q => {
-                q.userAnswer = null;
-                q.answered = false;
-                q.correct = null;
-            });
-            render();
-        }
-
-        function resetAll() {
-            resetAllProgress();
-            restartTimer();
-        }
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
-            render();
-        }
-
-        // ===== 初始化 =====
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() { setFilter(this.dataset.filter); });
         });
 
-        document.getElementById('resetProgressBtn').addEventListener('click', resetAllProgress);
-        document.getElementById('resetAllBtn').addEventListener('click', resetAll);
-        document.getElementById('restartTimerBtn').addEventListener('click', restartTimer);
+        container.innerHTML = html;
 
-        startTimer();
+        const total = currentQuestions.length;
+        const answered = currentQuestions.filter(q => q.userAnswer !== null && (Array.isArray(q.userAnswer) ? q.userAnswer.length > 0 : true)).length;
+        totalSpan.textContent = total;
+        answeredSpan.textContent = answered;
+
+        if (isSubmitted) {
+            const correct = currentQuestions.filter(q => q.isCorrect === true).length;
+            const wrong = currentQuestions.filter(q => q.isCorrect === false).length;
+            let score = 0;
+            currentQuestions.forEach(q => {
+                if (q.isCorrect === true) {
+                    if (q.type === 'multi') score += 2;
+                    else score += 1;
+                }
+            });
+            correctSpan.textContent = correct;
+            wrongSpan.textContent = wrong;
+            finalCorrect.textContent = correct;
+            finalWrong.textContent = wrong;
+            finalScore.textContent = score;
+            scoreDisplay.textContent = `🏆 ${score}分`;
+            resultStats.style.display = 'flex';
+        } else {
+            correctSpan.textContent = '—';
+            wrongSpan.textContent = '—';
+            scoreDisplay.textContent = '🏆 0分';
+            resultStats.style.display = 'none';
+        }
+        attachEvents();
+    }
+
+    function attachEvents() {
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
+            el.addEventListener('change', function(e) {
+                if (isSubmitted) return;
+                const name = this.name;
+                if (!name) return;
+                const idx = parseInt(name.split('_')[1]);
+                const q = currentQuestions[idx];
+                if (!q) return;
+                if (q.type === 'judge' || q.type === 'single') {
+                    const selected = document.querySelector(`input[name="${name}"]:checked`);
+                    q.userAnswer = selected ? selected.value : null;
+                } else if (q.type === 'multi') {
+                    const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+                    q.userAnswer = Array.from(checked).map(cb => cb.value);
+                    if (q.userAnswer.length === 0) q.userAnswer = null;
+                }
+                if (!isSubmitted) q.isCorrect = null;
+                render();
+            });
+        });
+    }
+
+    function grade() {
+        if (isSubmitted) return;
+        currentQuestions.forEach(q => {
+            let ans = q.userAnswer;
+            if (ans === null || (Array.isArray(ans) && ans.length === 0)) { q.isCorrect = false; return; }
+            if (q.type === 'judge' || q.type === 'single') q.isCorrect = (ans === q.answer);
+            else if (q.type === 'multi') {
+                const userSorted = [...ans].sort().join('');
+                const ansSorted = q.answer.slice().sort().join('');
+                q.isCorrect = (userSorted === ansSorted);
+            }
+        });
+        isSubmitted = true;
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
         render();
-    })();
+    }
+
+    function resetExam() {
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        const exam = buildExam();
+        currentQuestions = [...exam.judges, ...exam.singles, ...exam.multis];
+        currentQuestions.forEach(q => { q.userAnswer = null; q.isCorrect = null; });
+        isSubmitted = false;
+        timeSeconds = 7200;
+        updateTimerDisplay();
+        resultStats.style.display = 'none';
+        render();
+        startTimer();
+    }
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (isSubmitted) { clearInterval(timerInterval); timerInterval = null; return; }
+            timeSeconds--;
+            if (timeSeconds <= 0) { timeSeconds = 0; clearInterval(timerInterval); timerInterval = null; if (!isSubmitted) grade(); }
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = Math.floor(timeSeconds / 60);
+        const secs = timeSeconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        timerDisplay.style.color = timeSeconds <= 60 ? '#b33c3c' : '#003153';
+    }
+
+    function init() {
+        resetExam();
+        submitBtn.addEventListener('click', function() { if (!isSubmitted) grade(); });
+        resetBtn.addEventListener('click', resetExam);
+    }
+    init();
+})();
 </script>
 </body>
 </html>
